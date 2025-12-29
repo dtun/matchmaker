@@ -29,18 +29,21 @@ matchmaker/
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repo-url>
 cd matchmaker
 ```
 
 2. Install backend dependencies:
+
 ```bash
 cd backend
 bun install
 ```
 
 3. Install MCP server dependencies:
+
 ```bash
 cd ../mcp-server
 bun install
@@ -51,6 +54,7 @@ bun install
 ### Running Tests
 
 #### Backend
+
 ```bash
 cd backend
 bun test              # Run all tests
@@ -59,6 +63,7 @@ bun test --coverage   # With coverage report
 ```
 
 #### MCP Server
+
 ```bash
 cd mcp-server
 bun test              # Run all tests
@@ -69,12 +74,14 @@ bun test --coverage   # With coverage report
 ### Development
 
 #### Backend API
+
 ```bash
 cd backend
 bun run dev          # Start with hot reload
 ```
 
 #### MCP Server
+
 ```bash
 cd mcp-server
 bun run dev          # Start with hot reload
@@ -83,6 +90,7 @@ bun run dev          # Start with hot reload
 ## Continuous Integration
 
 This project uses GitHub Actions for CI/CD:
+
 - Tests run automatically on push and pull requests
 - Both backend and MCP server are tested
 - Dependencies managed by Dependabot

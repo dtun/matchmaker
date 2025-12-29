@@ -1,10 +1,10 @@
-import { beforeAll, afterAll } from 'bun:test';
+import { beforeAll, afterAll } from 'bun:test'
 
 // Global test setup
 beforeAll(() => {
-  console.log('Running backend test suite');
-});
+	console.log('Running backend test suite')
+})
 
 afterAll(() => {
-  console.log('Backend tests completed');
-});
+	console.log('Backend tests completed')
+})
