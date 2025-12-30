@@ -1,8 +1,11 @@
 import { describe, test, expect, mock } from 'bun:test'
 import { Hono } from 'hono'
-import { HTTPException } from 'hono/http-exception'
 import { createAuthMiddleware } from '../../src/middleware/auth'
 import { createMockSupabaseClient } from '../mocks/supabase'
+
+type Variables = {
+	userId: string
+}
 
 describe('authMiddleware', () => {
 	test('should extract Bearer token and set userId in context', async () => {
@@ -16,7 +19,7 @@ describe('authMiddleware', () => {
 			},
 		})
 
-		let app = new Hono()
+		let app = new Hono<{ Variables: Variables }>()
 		app.use('*', createAuthMiddleware(mockClient))
 		app.get('/test', c => {
 			let userId = c.get('userId')
@@ -29,7 +32,7 @@ describe('authMiddleware', () => {
 			},
 		})
 		let res = await app.fetch(req)
-		let json = await res.json()
+		let json = (await res.json()) as { userId: string }
 
 		expect(res.status).toBe(200)
 		expect(json.userId).toBe(mockUserId)
@@ -38,7 +41,7 @@ describe('authMiddleware', () => {
 
 	test('should return 401 if Authorization header missing', async () => {
 		let mockClient = createMockSupabaseClient()
-		let app = new Hono()
+		let app = new Hono<{ Variables: Variables }>()
 		app.use('*', createAuthMiddleware(mockClient))
 		app.get('/test', c => c.json({ ok: true }))
 
@@ -50,7 +53,7 @@ describe('authMiddleware', () => {
 
 	test('should return 401 if token format invalid', async () => {
 		let mockClient = createMockSupabaseClient()
-		let app = new Hono()
+		let app = new Hono<{ Variables: Variables }>()
 		app.use('*', createAuthMiddleware(mockClient))
 		app.get('/test', c => c.json({ ok: true }))
 
@@ -74,7 +77,7 @@ describe('authMiddleware', () => {
 			},
 		})
 
-		let app = new Hono()
+		let app = new Hono<{ Variables: Variables }>()
 		app.use('*', createAuthMiddleware(mockClient))
 		app.get('/test', c => c.json({ ok: true }))
 
@@ -98,7 +101,7 @@ describe('authMiddleware', () => {
 			},
 		})
 
-		let app = new Hono()
+		let app = new Hono<{ Variables: Variables }>()
 		app.use('*', createAuthMiddleware(mockClient))
 		app.get('/test', c => c.json({ ok: true }))
 
