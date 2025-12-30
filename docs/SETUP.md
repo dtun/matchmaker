@@ -110,31 +110,85 @@ Find production keys in your [Supabase Dashboard](https://supabase.com/dashboard
 
 ## 6. Database Schema
 
-The initial migration creates two tables:
+The migrations create four tables for the matchmaking system:
 
 ### matchmakers
 
 Extends `auth.users` with matchmaker-specific information.
 
-- `id` - UUID (references auth.users)
+- `id` - UUID (references auth.users, primary key)
 - `name` - VARCHAR(255)
 - `created_at` - TIMESTAMP WITH TIME ZONE
+- `updated_at` - TIMESTAMP WITH TIME ZONE (auto-updated via trigger)
 
 ### people
 
 Stores people in the matchmaking network.
 
 - `id` - UUID (primary key)
-- `matchmaker_id` - UUID (references matchmakers)
-- `name` - VARCHAR(255)
+- `matchmaker_id` - UUID (references matchmakers, CASCADE delete)
+- `name` - VARCHAR(255, required)
+- `age` - INTEGER
+- `location` - VARCHAR(255)
+- `gender` - VARCHAR(50)
+- `preferences` - JSONB (stores ageRange, values, dealBreakers, priorities)
+- `personality` - JSONB (stores traits and other attributes)
+- `notes` - TEXT
+- `active` - BOOLEAN (default true)
 - `created_at` - TIMESTAMP WITH TIME ZONE
+- `updated_at` - TIMESTAMP WITH TIME ZONE (auto-updated via trigger)
+
+**Indexes:**
+- `idx_people_matchmaker_id` on `matchmaker_id`
+- `idx_people_active` on `active`
+
+### introductions
+
+Tracks when two people are introduced by a matchmaker.
+
+- `id` - UUID (primary key)
+- `matchmaker_id` - UUID (references matchmakers, CASCADE delete)
+- `person_a_id` - UUID (references people, CASCADE delete)
+- `person_b_id` - UUID (references people, CASCADE delete)
+- `status` - VARCHAR(50) (default 'pending', values: pending, accepted, declined, dating, ended)
+- `notes` - TEXT
+- `created_at` - TIMESTAMP WITH TIME ZONE
+- `updated_at` - TIMESTAMP WITH TIME ZONE (auto-updated via trigger)
+
+**Constraints:**
+- Check constraint ensures `person_a_id != person_b_id` (no self-matching)
+
+**Indexes:**
+- `idx_introductions_matchmaker_id` on `matchmaker_id`
+- `idx_introductions_people` on `(person_a_id, person_b_id)`
+
+### feedback
+
+Stores feedback about dates and interactions between introduced people.
+
+- `id` - UUID (primary key)
+- `introduction_id` - UUID (references introductions, CASCADE delete)
+- `from_person_id` - UUID (references people, CASCADE delete)
+- `content` - TEXT (required)
+- `sentiment` - VARCHAR(50) (values: positive, neutral, negative, mixed)
+- `created_at` - TIMESTAMP WITH TIME ZONE
+
+**Indexes:**
+- `idx_feedback_introduction_id` on `introduction_id`
+- `idx_feedback_from_person_id` on `from_person_id`
 
 ### Row Level Security (RLS)
 
-Both tables have RLS enabled:
+All tables have RLS enabled with policies ensuring matchmakers can only access their own data:
 
-- **matchmakers**: Users can only view their own profile
-- **people**: Matchmakers can only view/edit people they manage
+- **matchmakers**: Users can view their own profile (SELECT only)
+- **people**: Matchmakers can perform full CRUD on people they manage
+- **introductions**: Matchmakers can perform full CRUD on their own introductions
+- **feedback**: Matchmakers can view and insert feedback for their own introductions
+
+### Automatic Timestamps
+
+The `updated_at` columns on matchmakers, people, and introductions are automatically updated via triggers whenever a row is modified.
 
 ## 7. Migration Commands
 
