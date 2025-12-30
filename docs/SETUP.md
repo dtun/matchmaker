@@ -9,12 +9,26 @@ This guide will help you set up Supabase for the Matchmaker system.
 
 ## 1. Install Supabase CLI
 
-```bash
-# Using Bun (recommended)
-bun install -g supabase
+### macOS (Homebrew - Recommended)
 
-# Or using npm
+```bash
+brew install supabase/tap/supabase
+```
+
+### Other Methods
+
+```bash
+# Using npm
 npm install -g supabase
+
+# Or using Bun (may have PATH issues)
+bun install -g supabase
+```
+
+Verify installation:
+
+```bash
+supabase --version
 ```
 
 ## 2. Initialize Supabase
@@ -139,6 +153,7 @@ Stores people in the matchmaking network.
 - `updated_at` - TIMESTAMP WITH TIME ZONE (auto-updated via trigger)
 
 **Indexes:**
+
 - `idx_people_matchmaker_id` on `matchmaker_id`
 - `idx_people_active` on `active`
 
@@ -156,9 +171,11 @@ Tracks when two people are introduced by a matchmaker.
 - `updated_at` - TIMESTAMP WITH TIME ZONE (auto-updated via trigger)
 
 **Constraints:**
+
 - Check constraint ensures `person_a_id != person_b_id` (no self-matching)
 
 **Indexes:**
+
 - `idx_introductions_matchmaker_id` on `matchmaker_id`
 - `idx_introductions_people` on `(person_a_id, person_b_id)`
 
@@ -174,6 +191,7 @@ Stores feedback about dates and interactions between introduced people.
 - `created_at` - TIMESTAMP WITH TIME ZONE
 
 **Indexes:**
+
 - `idx_feedback_introduction_id` on `introduction_id`
 - `idx_feedback_from_person_id` on `from_person_id`
 

@@ -7,7 +7,7 @@ AI-powered matchmaking system with MCP integration.
 1. **Setup Supabase** - See [docs/SETUP.md](docs/SETUP.md)
 2. **Run Backend** - `cd backend && bun install && bun run dev`
 3. **Build MCP Server** - `cd mcp-server && bun install && bun run build`
-4. **Configure MCP Client** - See [docs/SETUP.md](docs/SETUP.md)
+4. **Configure MCP Client** - See [docs/MCP_SETUP.md](docs/MCP_SETUP.md)
 
 ## Project Structure
 
