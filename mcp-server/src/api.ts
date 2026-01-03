@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import type { Config } from './config'
+import { personResponseSchema, peopleListResponseSchema } from './schemas'
 
 let addPersonInputSchema = z.object({
 	name: z.string().min(1, 'Name is required'),
@@ -23,6 +24,24 @@ export interface Person {
 export class ApiClient {
 	constructor(private config: Config) {}
 
+	private async parseResponse<T>(response: Response, schema: z.ZodSchema<T>): Promise<T> {
+		let data: unknown
+		try {
+			data = await response.json()
+		} catch (e) {
+			throw new Error(`Failed to parse JSON: ${e instanceof Error ? e.message : 'Unknown error'}`)
+		}
+
+		try {
+			return schema.parse(data)
+		} catch (e) {
+			if (e instanceof z.ZodError) {
+				throw new Error(`API response validation failed: ${e.errors[0]?.message}`)
+			}
+			throw e
+		}
+	}
+
 	async addPerson(name: string): Promise<Person> {
 		// Validate input
 		addPersonInputSchema.parse({ name })
@@ -40,7 +59,7 @@ export class ApiClient {
 			throw new Error(`HTTP ${response.status}: ${response.statusText}`)
 		}
 
-		return response.json() as Promise<Person>
+		return this.parseResponse(response, personResponseSchema)
 	}
 
 	async listPeople(): Promise<Person[]> {
@@ -55,7 +74,6 @@ export class ApiClient {
 			throw new Error(`HTTP ${response.status}: ${response.statusText}`)
 		}
 
-		return response.json() as Promise<Person[]>
+		return this.parseResponse(response, peopleListResponseSchema)
 	}
 }
-

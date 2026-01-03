@@ -17,8 +17,8 @@ describe('ApiClient', () => {
 		let result = await client.addPerson('John Doe')
 
 		expect(result.name).toBe('John Doe')
-		expect(result.id).toBe('test-uuid')
-		expect(result.matchmaker_id).toBe('user-uuid')
+		expect(result.id).toBe('550e8400-e29b-41d4-a716-446655440000')
+		expect(result.matchmaker_id).toBe('123e4567-e89b-12d3-a456-426614174000')
 	})
 
 	test('addPerson(name) validates name is not empty', async () => {
@@ -44,7 +44,7 @@ describe('ApiClient', () => {
 		let firstPerson = result[0]
 		expect(firstPerson).toBeDefined()
 		expect(firstPerson?.name).toBe('Alice')
-		expect(firstPerson?.id).toBe('person-1')
+		expect(firstPerson?.id).toBe('660e8400-e29b-41d4-a716-446655440001')
 	})
 
 	test('listPeople() returns empty array when no people exist', async () => {

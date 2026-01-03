@@ -12,9 +12,15 @@ export let handlers = [
 		let body = (await request.json()) as { name: string }
 		return HttpResponse.json(
 			{
-				id: 'test-uuid',
+				id: '550e8400-e29b-41d4-a716-446655440000',
 				name: body.name,
-				matchmaker_id: 'user-uuid',
+				matchmaker_id: '123e4567-e89b-12d3-a456-426614174000',
+				age: null,
+				location: null,
+				gender: null,
+				preferences: null,
+				personality: null,
+				notes: null,
 				active: true,
 				created_at: new Date().toISOString(),
 				updated_at: new Date().toISOString(),
@@ -31,10 +37,18 @@ export let handlers = [
 		}
 		return HttpResponse.json([
 			{
-				id: 'person-1',
+				id: '660e8400-e29b-41d4-a716-446655440001',
 				name: 'Alice',
-				matchmaker_id: 'user-uuid',
+				matchmaker_id: '123e4567-e89b-12d3-a456-426614174000',
+				age: null,
+				location: null,
+				gender: null,
+				preferences: null,
+				personality: null,
+				notes: null,
 				active: true,
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString(),
 			},
 		])
 	}),
