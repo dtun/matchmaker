@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Input, Textarea } from "./ui";
+import { Button, Input } from "./ui";
 import { referralSchema, type ReferralFormData } from "@/schemas/referral";
 
 export function ReferralForm() {
@@ -76,13 +76,6 @@ export function ReferralForm() {
 
 	return (
 		<div className="w-full">
-			<div className="mb-6 text-center">
-				<h3 className="text-2xl font-bold text-gray-900">Refer a Matchmaker</h3>
-				<p className="mt-2 text-gray-600">
-					Know someone who loves playing matchmaker? Send them an invite!
-				</p>
-			</div>
-
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 				<Input
 					label="Your Name"
@@ -99,32 +92,6 @@ export function ReferralForm() {
 					required
 					{...register("single_email")}
 					error={errors.single_email?.message}
-					disabled={isSubmitting}
-				/>
-
-				<Input
-					label="Matchmaker's Name"
-					type="text"
-					{...register("matchmaker_name")}
-					error={errors.matchmaker_name?.message}
-					helperText="Optional"
-					disabled={isSubmitting}
-				/>
-
-				<Input
-					label="Matchmaker's Email"
-					type="email"
-					required
-					{...register("matchmaker_email")}
-					error={errors.matchmaker_email?.message}
-					disabled={isSubmitting}
-				/>
-
-				<Textarea
-					label="Message"
-					{...register("message")}
-					error={errors.message?.message}
-					helperText="Optional - Why do you think they'd love this?"
 					disabled={isSubmitting}
 				/>
 

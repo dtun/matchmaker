@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Hero } from "@/components/Hero";
 import { SmartNotesDemo } from "@/components/SmartNotesDemo";
 import { Features } from "@/components/Features";
@@ -6,6 +9,10 @@ import { ReferralForm } from "@/components/ReferralForm";
 import { Card } from "@/components/ui";
 
 export default function Home() {
+	let [activeForm, setActiveForm] = useState<"matchmaker" | "single">(
+		"matchmaker",
+	);
+
 	return (
 		<main className="flex min-h-screen flex-col">
 			{/* Hero Section */}
@@ -21,44 +28,56 @@ export default function Home() {
 				</div>
 			</section>
 
-			{/* Dual Waitlist Section */}
+			{/* Waitlist Section */}
 			<section className="bg-gray-50 py-20">
 				<div className="container mx-auto px-4">
-					<div className="grid gap-8 md:grid-cols-2">
-						{/* Matchmaker Waitlist */}
-						<div id="waitlist">
-							<Card variant="elevated" className="h-full">
-								<div className="p-6">
-									<h2 className="text-2xl font-bold text-gray-900">
-										Join the Waitlist
-									</h2>
-									<p className="mt-2 text-gray-600">
-										For matchmakers who want to connect friends and family
-									</p>
-									<div className="mt-6">
-										<WaitlistForm />
-									</div>
-								</div>
-							</Card>
-						</div>
-
-						{/* Refer a Matchmaker */}
-						<div id="referral">
-							<Card variant="elevated" className="h-full">
-								<div className="p-6">
-									<h2 className="text-2xl font-bold text-gray-900">
-										Refer a Matchmaker
-									</h2>
-									<p className="mt-2 text-gray-600">
-										Know someone who loves playing matchmaker? Send them an
-										invite!
-									</p>
-									<div className="mt-6">
-										<ReferralForm />
-									</div>
-								</div>
-							</Card>
-						</div>
+					<div className="mx-auto max-w-md" id="waitlist">
+						<Card variant="elevated">
+							<div className="p-6">
+								{activeForm === "matchmaker" ? (
+									<>
+										<h2 className="text-2xl font-bold text-gray-900">
+											Join the Waitlist
+										</h2>
+										<p className="mt-2 text-gray-600">
+											For matchmakers who want to connect friends and family
+										</p>
+										<div className="mt-6">
+											<WaitlistForm />
+										</div>
+										<div className="mt-4 text-center">
+											<button
+												onClick={() => setActiveForm("single")}
+												className="text-sm text-gray-500 hover:text-sky-600 transition-colors"
+											>
+												Not a matchmaker?
+											</button>
+										</div>
+									</>
+								) : (
+									<>
+										<h2 className="text-2xl font-bold text-gray-900">
+											Refer a Matchmaker
+										</h2>
+										<p className="mt-2 text-gray-600">
+											Know someone who loves playing matchmaker? Send them an
+											invite!
+										</p>
+										<div className="mt-6">
+											<ReferralForm />
+										</div>
+										<div className="mt-4 text-center">
+											<button
+												onClick={() => setActiveForm("matchmaker")}
+												className="text-sm text-gray-500 hover:text-sky-600 transition-colors"
+											>
+												Are you a matchmaker?
+											</button>
+										</div>
+									</>
+								)}
+							</div>
+						</Card>
 					</div>
 				</div>
 			</section>

@@ -42,13 +42,6 @@ export function Hero() {
 						>
 							Join the Waitlist
 						</Button>
-						<Button
-							onClick={() => scrollToSection("referral")}
-							size="lg"
-							variant="outline"
-						>
-							Refer Your Matchmaker
-						</Button>
 					</div>
 				</div>
 			</div>
