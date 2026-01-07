@@ -44,13 +44,13 @@ let features = [
 
 export function Features() {
 	return (
-		<section className="bg-white py-24 sm:py-32">
+		<section className="bg-white py-24 dark:bg-gray-950 sm:py-32">
 			<div className="mx-auto max-w-7xl px-6 lg:px-8">
 				<div className="mx-auto max-w-2xl text-center">
-					<h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+					<h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl">
 						Everything you need to be a great matchmaker
 					</h2>
-					<p className="mt-6 text-lg leading-8 text-gray-600">
+					<p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
 						AI-assisted tools that help you make meaningful connections while
 						keeping you in complete control.
 					</p>
@@ -59,8 +59,8 @@ export function Features() {
 					<dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
 						{features.map((feature) => (
 							<div key={feature.name} className="relative pl-16">
-								<dt className="text-base font-semibold leading-7 text-gray-900">
-									<div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-sky-500">
+								<dt className="text-base font-semibold leading-7 text-gray-900 dark:text-gray-100">
+									<div className="absolute left-0 top-0 flex h-10 w-10 items-center justify-center rounded-lg bg-sky-500 dark:bg-sky-600">
 										<feature.icon
 											className="h-6 w-6 text-white"
 											aria-hidden="true"
@@ -68,7 +68,7 @@ export function Features() {
 									</div>
 									{feature.name}
 								</dt>
-								<dd className="mt-2 text-base leading-7 text-gray-600">
+								<dd className="mt-2 text-base leading-7 text-gray-600 dark:text-gray-400">
 									{feature.description}
 								</dd>
 							</div>

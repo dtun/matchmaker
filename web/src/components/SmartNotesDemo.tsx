@@ -2,13 +2,13 @@ import { Terminal } from "lucide-react";
 
 export function SmartNotesDemo() {
 	return (
-		<section className="bg-gray-50 py-24 sm:py-32">
+		<section className="bg-gray-50 py-24 dark:bg-gray-900 sm:py-32">
 			<div className="mx-auto max-w-7xl px-6 lg:px-8">
 				<div className="mx-auto max-w-2xl text-center">
-					<h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+					<h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl">
 						Works where you like to work
 					</h2>
-					<p className="mt-6 text-lg leading-8 text-gray-600">
+					<p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
 						Claude Chat, ChatGPT, mobile app (coming soon)
 					</p>
 				</div>
@@ -79,47 +79,47 @@ export function SmartNotesDemo() {
 
 					{/* Emphasis message */}
 					<div className="mt-8 text-center">
-						<p className="text-lg font-semibold text-gray-900">
+						<p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
 							You're in control. AI assists, you decide.
 						</p>
 					</div>
 
 					{/* How It Works */}
 					<div className="mt-16">
-						<h3 className="text-center text-2xl font-bold tracking-tight text-gray-900">
+						<h3 className="text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
 							How It Works
 						</h3>
 						<div className="mt-10 grid gap-8 sm:grid-cols-3">
 							<div className="text-center">
-								<div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sky-100 text-sky-600">
+								<div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sky-100 text-sky-600 dark:bg-sky-900 dark:text-sky-400">
 									<span className="text-xl font-bold">1</span>
 								</div>
-								<h4 className="mt-4 text-base font-semibold text-gray-900">
+								<h4 className="mt-4 text-base font-semibold text-gray-900 dark:text-gray-100">
 									Choose your platform
 								</h4>
-								<p className="mt-2 text-sm text-gray-600">
+								<p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
 									Claude, ChatGPT, or mobile app (coming soon)
 								</p>
 							</div>
 							<div className="text-center">
-								<div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sky-100 text-sky-600">
+								<div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sky-100 text-sky-600 dark:bg-sky-900 dark:text-sky-400">
 									<span className="text-xl font-bold">2</span>
 								</div>
-								<h4 className="mt-4 text-base font-semibold text-gray-900">
+								<h4 className="mt-4 text-base font-semibold text-gray-900 dark:text-gray-100">
 									Add people and details
 								</h4>
-								<p className="mt-2 text-sm text-gray-600">
+								<p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
 									Use natural conversation to keep track of friends and family
 								</p>
 							</div>
 							<div className="text-center">
-								<div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sky-100 text-sky-600">
+								<div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sky-100 text-sky-600 dark:bg-sky-900 dark:text-sky-400">
 									<span className="text-xl font-bold">3</span>
 								</div>
-								<h4 className="mt-4 text-base font-semibold text-gray-900">
+								<h4 className="mt-4 text-base font-semibold text-gray-900 dark:text-gray-100">
 									Get organized suggestions
 								</h4>
-								<p className="mt-2 text-sm text-gray-600">
+								<p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
 									AI helps you make great matches - you make the final call
 								</p>
 							</div>

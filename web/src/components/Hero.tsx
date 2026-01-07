@@ -11,23 +11,23 @@ export function Hero() {
 	};
 
 	return (
-		<section className="relative overflow-hidden bg-gradient-to-b from-sky-50 to-white py-20 sm:py-32">
+		<section className="relative overflow-hidden bg-gradient-to-b from-sky-50 to-white py-20 dark:from-gray-900 dark:to-gray-950 sm:py-32">
 			<div className="mx-auto max-w-7xl px-6 lg:px-8">
 				<div className="mx-auto max-w-2xl text-center">
 					{/* Brand Logo/Name */}
 					<div className="mb-8">
-						<h1 className="text-4xl font-bold tracking-tight text-sky-600 sm:text-5xl">
+						<h1 className="text-4xl font-bold tracking-tight text-sky-600 dark:text-sky-400 sm:text-5xl">
 							The Introduction
 						</h1>
 					</div>
 
 					{/* Main Headline */}
-					<h2 className="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+					<h2 className="text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-6xl">
 						Smart Notes for Matchmakers
 					</h2>
 
 					{/* Subheadline */}
-					<p className="mt-6 text-lg leading-8 text-gray-600">
+					<p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
 						Empower your matchmaking with AI assistance. Connect friends and
 						family where you work - Claude, ChatGPT, or our mobile app (coming
 						soon).

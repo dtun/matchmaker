@@ -10,7 +10,7 @@ import { Card } from "@/components/ui";
 
 export default function Home() {
 	let [activeForm, setActiveForm] = useState<"matchmaker" | "single">(
-		"matchmaker",
+		"matchmaker"
 	);
 
 	return (
@@ -29,17 +29,17 @@ export default function Home() {
 			</section>
 
 			{/* Waitlist Section */}
-			<section className="bg-gray-50 py-20">
+			<section className="bg-gray-50 py-20 dark:bg-gray-900">
 				<div className="container mx-auto px-4">
 					<div className="mx-auto max-w-md" id="waitlist">
 						<Card variant="elevated">
 							<div className="p-6">
 								{activeForm === "matchmaker" ? (
 									<>
-										<h2 className="text-2xl font-bold text-gray-900">
+										<h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
 											Join the Waitlist
 										</h2>
-										<p className="mt-2 text-gray-600">
+										<p className="mt-2 text-gray-600 dark:text-gray-400">
 											For matchmakers who want to connect friends and family
 										</p>
 										<div className="mt-6">
@@ -48,7 +48,7 @@ export default function Home() {
 										<div className="mt-4 text-center">
 											<button
 												onClick={() => setActiveForm("single")}
-												className="text-sm text-gray-500 hover:text-sky-600 transition-colors"
+												className="text-sm text-gray-500 transition-colors hover:text-sky-600 dark:text-gray-400 dark:hover:text-sky-400"
 											>
 												Not a matchmaker?
 											</button>
@@ -56,10 +56,10 @@ export default function Home() {
 									</>
 								) : (
 									<>
-										<h2 className="text-2xl font-bold text-gray-900">
+										<h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
 											Refer a Matchmaker
 										</h2>
-										<p className="mt-2 text-gray-600">
+										<p className="mt-2 text-gray-600 dark:text-gray-400">
 											Know someone who loves playing matchmaker? Send them an
 											invite!
 										</p>
@@ -69,7 +69,7 @@ export default function Home() {
 										<div className="mt-4 text-center">
 											<button
 												onClick={() => setActiveForm("matchmaker")}
-												className="text-sm text-gray-500 hover:text-sky-600 transition-colors"
+												className="text-sm text-gray-500 transition-colors hover:text-sky-600 dark:text-gray-400 dark:hover:text-sky-400"
 											>
 												Are you a matchmaker?
 											</button>
@@ -83,26 +83,32 @@ export default function Home() {
 			</section>
 
 			{/* Footer */}
-			<footer className="border-t border-gray-200 bg-white py-12">
+			<footer className="border-t border-gray-200 bg-white py-12 dark:border-gray-800 dark:bg-gray-950">
 				<div className="container mx-auto px-4">
 					<div className="flex flex-col items-center space-y-4">
 						<div className="text-center">
-							<h3 className="text-xl font-bold text-gray-900">
+							<h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
 								The Introduction
 							</h3>
-							<p className="mt-1 text-sm text-gray-600">
+							<p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
 								Empowering matchmakers with AI-assisted tools
 							</p>
 						</div>
-						<div className="flex space-x-6 text-sm text-gray-500">
-							<a href="#" className="transition-colors hover:text-sky-500">
+						<div className="flex space-x-6 text-sm text-gray-500 dark:text-gray-400">
+							<a
+								href="#"
+								className="transition-colors hover:text-sky-500 dark:hover:text-sky-400"
+							>
 								Privacy Policy
 							</a>
-							<a href="#" className="transition-colors hover:text-sky-500">
+							<a
+								href="#"
+								className="transition-colors hover:text-sky-500 dark:hover:text-sky-400"
+							>
 								Terms
 							</a>
 						</div>
-						<p className="text-xs text-gray-400">
+						<p className="text-xs text-gray-400 dark:text-gray-500">
 							© {new Date().getFullYear()} The Introduction. All rights
 							reserved.
 						</p>
