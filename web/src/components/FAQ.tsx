@@ -77,10 +77,10 @@ export function FAQ() {
 									aria-expanded={openIndex === index}
 								>
 									<div className="flex items-start gap-4">
-										<div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 to-indigo-500 text-sm font-bold text-white transition-transform group-hover:scale-110">
+										<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 to-indigo-500 text-sm font-bold text-white transition-transform group-hover:scale-110">
 											{index + 1}
 										</div>
-										<h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+										<h3 className="self-center text-lg font-bold text-gray-900 dark:text-gray-100">
 											{faq.question}
 										</h3>
 									</div>
