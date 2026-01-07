@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Hero } from "@/components/Hero";
 import { SmartNotesDemo } from "@/components/SmartNotesDemo";
 import { Features } from "@/components/Features";
+import { FAQ } from "@/components/FAQ";
 import { WaitlistForm } from "@/components/WaitlistForm";
 import { ReferralForm } from "@/components/ReferralForm";
 import { Card } from "@/components/ui";
@@ -23,6 +24,9 @@ export default function Home() {
 
 			{/* Features Section */}
 			<Features />
+
+			{/* FAQ Section */}
+			<FAQ />
 
 			{/* Waitlist Section */}
 			<section className="relative overflow-hidden bg-gradient-to-br from-sky-50 via-indigo-50 to-purple-50 py-24 dark:from-gray-900 dark:via-indigo-950 dark:to-purple-950 sm:py-32">

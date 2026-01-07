@@ -1,0 +1,151 @@
+"use client";
+
+import { useState } from "react";
+
+interface FAQItem {
+	question: string;
+	answer: string;
+}
+
+let faqs: FAQItem[] = [
+	{
+		question: "What is The Introduction?",
+		answer:
+			"The Introduction is an AI-powered platform designed to help matchmakers connect their friends and family. We make it easy to keep track of your single friends, remember important details, and find great matches—all with the help of smart notes and intelligent suggestions.",
+	},
+	{
+		question: "How does the AI help with matchmaking?",
+		answer:
+			"Our AI analyzes your notes about each person to identify compatibility factors, suggest potential matches, and help you remember key details. It's like having a personal assistant that never forgets a birthday, a hobby, or that someone is looking for a partner who loves hiking.",
+	},
+	{
+		question: "Is my data private and secure?",
+		answer:
+			"Absolutely. Your notes and all personal information are encrypted and stored securely. We never share your data with third parties, and you maintain full control over who sees what. Privacy is a core value—we're here to help you connect people, not exploit their data.",
+	},
+	{
+		question: "Can I use this if I'm not a professional matchmaker?",
+		answer:
+			"Yes! The Introduction is perfect for anyone who enjoys playing matchmaker—whether you're setting up friends, helping family members find love, or just love the thrill of making great connections. No professional experience required.",
+	},
+	{
+		question: "How much does it cost?",
+		answer:
+			"We're currently in development and building our waitlist. Pricing details will be announced before launch, but we're committed to keeping it affordable and accessible for everyone who wants to spread a little love.",
+	},
+	{
+		question: "When will The Introduction be available?",
+		answer:
+			"We're working hard to launch soon! Join our waitlist to be among the first to know when we go live. Waitlist members will get early access and exclusive benefits.",
+	},
+];
+
+export function FAQ() {
+	let [openIndex, setOpenIndex] = useState<number | null>(null);
+
+	let toggleQuestion = (index: number) => {
+		setOpenIndex(openIndex === index ? null : index);
+	};
+
+	return (
+		<section className="relative overflow-hidden bg-white py-24 dark:bg-gray-950 sm:py-32">
+			<div className="container mx-auto px-4">
+				<div className="mx-auto max-w-3xl">
+					{/* Header */}
+					<div className="text-center">
+						<div className="mb-6 inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-4 py-1.5 text-sm font-semibold text-sky-700 dark:border-sky-800 dark:bg-sky-900/30 dark:text-sky-300">
+							Got questions?
+						</div>
+						<h2 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl">
+							Frequently Asked{" "}
+							<span className="bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent dark:from-sky-400 dark:to-indigo-400">
+								Questions
+							</span>
+						</h2>
+						<p className="mt-6 text-lg text-gray-600 dark:text-gray-400">
+							Everything you need to know about The Introduction
+						</p>
+					</div>
+
+					{/* FAQ Items */}
+					<div className="mt-16 space-y-4">
+						{faqs.map((faq, index) => (
+							<div
+								key={index}
+								className="group rounded-2xl border border-gray-200 bg-white transition-all hover:border-sky-300 hover:shadow-lg dark:border-gray-800 dark:bg-gray-900 dark:hover:border-sky-700"
+							>
+								<button
+									onClick={() => toggleQuestion(index)}
+									className="flex w-full items-start justify-between gap-4 p-6 text-left transition-all"
+									aria-expanded={openIndex === index}
+								>
+									<div className="flex items-start gap-4">
+										<div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-sky-500 to-indigo-500 text-sm font-bold text-white transition-transform group-hover:scale-110">
+											{index + 1}
+										</div>
+										<h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+											{faq.question}
+										</h3>
+									</div>
+									<svg
+										className={`mt-1 h-6 w-6 shrink-0 text-gray-500 transition-transform dark:text-gray-400 ${
+											openIndex === index ? "rotate-180" : ""
+										}`}
+										fill="none"
+										stroke="currentColor"
+										viewBox="0 0 24 24"
+									>
+										<path
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											strokeWidth={2}
+											d="M19 9l-7 7-7-7"
+										/>
+									</svg>
+								</button>
+								<div
+									className={`overflow-hidden transition-all duration-300 ${
+										openIndex === index ? "max-h-96" : "max-h-0"
+									}`}
+								>
+									<div className="px-6 pb-6 pl-[4.5rem]">
+										<p className="text-gray-600 dark:text-gray-400">
+											{faq.answer}
+										</p>
+									</div>
+								</div>
+							</div>
+						))}
+					</div>
+
+					{/* Contact CTA */}
+					<div className="mt-16 text-center">
+						<p className="text-base text-gray-600 dark:text-gray-400">
+							Still have questions?{" "}
+							<a
+								href="mailto:hello@theintro.xyz"
+								className="font-semibold text-sky-600 transition-colors hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300"
+							>
+								Get in touch
+							</a>
+						</p>
+					</div>
+				</div>
+			</div>
+
+			{/* Decorative background */}
+			<div
+				className="absolute inset-x-0 top-0 -z-10 transform-gpu overflow-hidden blur-3xl"
+				aria-hidden="true"
+			>
+				<div
+					className="relative left-[calc(50%-10rem)] aspect-[1155/678] w-[36.125rem] rotate-[30deg] bg-gradient-to-tr from-indigo-300 to-purple-300 opacity-20 dark:opacity-10"
+					style={{
+						clipPath:
+							"polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+					}}
+				/>
+			</div>
+		</section>
+	);
+}

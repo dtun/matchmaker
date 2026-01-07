@@ -118,3 +118,63 @@ Completely redesigned the landing page with a modern, professional, and playful 
 - All animations use Tailwind's built-in transition utilities
 - The design maintains full responsiveness across all breakpoints
 - Consider adding subtle scroll animations in future iterations
+
+## 2026-01-06 - FAQ Section Implementation
+
+### What was done:
+Added a comprehensive FAQ (Frequently Asked Questions) section to the landing page with an accordion-style interface that matches the modern, playful design aesthetic.
+
+### Changes made:
+
+1. **FAQ Component** (src/components/FAQ.tsx):
+   - Created new FAQ component with accordion functionality
+   - Implemented 6 comprehensive questions covering:
+     - What is The Introduction
+     - How AI helps with matchmaking
+     - Privacy and security
+     - Usage by non-professional matchmakers
+     - Pricing information
+     - Launch timeline
+   - Added numbered gradient badges (sky to indigo) for each question
+   - Implemented smooth expand/collapse animations with rotation effect on chevron icon
+   - Added hover effects with border color change and shadow
+   - Included "Got questions?" badge at top
+   - Added gradient text effect on "Questions" in heading
+   - Included "Still have questions? Get in touch" CTA at bottom with email link
+   - Added decorative gradient background element for visual interest
+   - Full dark mode support with appropriate color variants
+
+2. **Landing Page Integration** (src/app/page.tsx):
+   - Imported FAQ component
+   - Positioned FAQ section between Features and Waitlist sections
+   - Maintains natural flow: Hero → Demo → Features → FAQ → Waitlist → Footer
+
+### Design principles applied:
+- **Consistent branding**: Used same sky → indigo gradient palette
+- **Interactive**: Accordion interface encourages exploration
+- **Accessible**: Clear visual feedback on hover and expand states
+- **Modern**: Smooth animations, numbered badges, gradient effects
+- **Informative**: Covers key user concerns and questions
+- **Responsive**: Works seamlessly across all screen sizes
+
+### Build Status:
+✅ Format check passed
+✅ Build successful (all 6 pages generated)
+✅ Types valid
+✅ No errors or warnings
+
+### Next Steps:
+All features from plan-3.md have been completed! The landing page now includes:
+- ✅ Dark mode with system preference support
+- ✅ Modern, professional, and playful design makeover
+- ✅ Comprehensive FAQ section
+
+### Notes for next developer:
+- FAQ uses client-side state for accordion functionality
+- Each FAQ item is individually expandable/collapsible
+- The accordion auto-closes other items when one is opened (single-select behavior)
+- Email link in CTA points to hello@theintro.xyz - update if needed
+- FAQ content is stored in array at top of component for easy editing
+- Consider adding analytics tracking for which FAQ items are most frequently opened
+- Could add search/filter functionality if FAQ list grows significantly
+- The section maintains the consistent gradient background treatment established in other sections
