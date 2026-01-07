@@ -2,25 +2,33 @@ import { Terminal } from "lucide-react";
 
 export function SmartNotesDemo() {
 	return (
-		<section className="bg-gray-50 py-24 dark:bg-gray-900 sm:py-32">
+		<section className="relative bg-gradient-to-b from-gray-50 to-white py-24 dark:from-gray-900 dark:to-gray-950 sm:py-32">
 			<div className="mx-auto max-w-7xl px-6 lg:px-8">
 				<div className="mx-auto max-w-2xl text-center">
-					<h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl">
-						Works where you like to work
+					<div className="mb-4 inline-flex items-center rounded-full bg-sky-100 px-4 py-2 text-sm font-semibold text-sky-700 dark:bg-sky-900/30 dark:text-sky-300">
+						Works everywhere you do
+					</div>
+					<h2 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl">
+						Natural conversation,
+						<br />
+						<span className="text-sky-600 dark:text-sky-400">
+							powerful results
+						</span>
 					</h2>
 					<p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">
-						Claude Chat, ChatGPT, mobile app (coming soon)
+						Use The Introduction in Claude Chat, ChatGPT, or our mobile app
+						(coming soon)
 					</p>
 				</div>
 
-				<div className="mx-auto mt-16 max-w-4xl">
+				<div className="mx-auto mt-16 max-w-5xl">
 					{/* Terminal-style demo */}
-					<div className="overflow-hidden rounded-lg bg-gray-900 shadow-xl">
-						<div className="flex items-center gap-2 border-b border-gray-700 bg-gray-800 px-4 py-3">
+					<div className="overflow-hidden rounded-2xl bg-gray-900 shadow-2xl ring-1 ring-gray-800">
+						<div className="flex items-center gap-2 border-b border-gray-700 bg-gradient-to-r from-gray-800 to-gray-900 px-4 py-3">
 							<div className="flex gap-1.5">
-								<div className="h-3 w-3 rounded-full bg-red-500" />
-								<div className="h-3 w-3 rounded-full bg-yellow-500" />
-								<div className="h-3 w-3 rounded-full bg-green-500" />
+								<div className="h-3 w-3 rounded-full bg-red-500 shadow-sm" />
+								<div className="h-3 w-3 rounded-full bg-yellow-500 shadow-sm" />
+								<div className="h-3 w-3 rounded-full bg-green-500 shadow-sm" />
 							</div>
 							<div className="ml-2 flex items-center gap-2 text-sm text-gray-400">
 								<Terminal className="h-4 w-4" />
@@ -78,48 +86,51 @@ export function SmartNotesDemo() {
 					</div>
 
 					{/* Emphasis message */}
-					<div className="mt-8 text-center">
-						<p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-							You're in control. AI assists, you decide.
-						</p>
+					<div className="mt-10 text-center">
+						<div className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-sky-50 to-indigo-50 px-6 py-3 dark:from-sky-900/20 dark:to-indigo-900/20">
+							<div className="h-2 w-2 animate-pulse rounded-full bg-sky-500" />
+							<p className="text-lg font-bold text-gray-900 dark:text-gray-100">
+								You're in control. AI assists, you decide.
+							</p>
+						</div>
 					</div>
 
 					{/* How It Works */}
-					<div className="mt-16">
-						<h3 className="text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+					<div className="mt-20">
+						<h3 className="text-center text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100">
 							How It Works
 						</h3>
-						<div className="mt-10 grid gap-8 sm:grid-cols-3">
-							<div className="text-center">
-								<div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sky-100 text-sky-600 dark:bg-sky-900 dark:text-sky-400">
-									<span className="text-xl font-bold">1</span>
+						<div className="mt-12 grid gap-10 sm:grid-cols-3">
+							<div className="group text-center">
+								<div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-400 to-sky-600 text-white shadow-lg transition-transform duration-300 group-hover:scale-110">
+									<span className="text-2xl font-bold">1</span>
 								</div>
-								<h4 className="mt-4 text-base font-semibold text-gray-900 dark:text-gray-100">
+								<h4 className="mt-6 text-lg font-bold text-gray-900 dark:text-gray-100">
 									Choose your platform
 								</h4>
-								<p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+								<p className="mt-3 text-base text-gray-600 dark:text-gray-400">
 									Claude, ChatGPT, or mobile app (coming soon)
 								</p>
 							</div>
-							<div className="text-center">
-								<div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sky-100 text-sky-600 dark:bg-sky-900 dark:text-sky-400">
-									<span className="text-xl font-bold">2</span>
+							<div className="group text-center">
+								<div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-400 to-indigo-600 text-white shadow-lg transition-transform duration-300 group-hover:scale-110">
+									<span className="text-2xl font-bold">2</span>
 								</div>
-								<h4 className="mt-4 text-base font-semibold text-gray-900 dark:text-gray-100">
+								<h4 className="mt-6 text-lg font-bold text-gray-900 dark:text-gray-100">
 									Add people and details
 								</h4>
-								<p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+								<p className="mt-3 text-base text-gray-600 dark:text-gray-400">
 									Use natural conversation to keep track of friends and family
 								</p>
 							</div>
-							<div className="text-center">
-								<div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sky-100 text-sky-600 dark:bg-sky-900 dark:text-sky-400">
-									<span className="text-xl font-bold">3</span>
+							<div className="group text-center">
+								<div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-400 to-purple-600 text-white shadow-lg transition-transform duration-300 group-hover:scale-110">
+									<span className="text-2xl font-bold">3</span>
 								</div>
-								<h4 className="mt-4 text-base font-semibold text-gray-900 dark:text-gray-100">
-									Get organized suggestions
+								<h4 className="mt-6 text-lg font-bold text-gray-900 dark:text-gray-100">
+									Get smart suggestions
 								</h4>
-								<p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+								<p className="mt-3 text-base text-gray-600 dark:text-gray-400">
 									AI helps you make great matches - you make the final call
 								</p>
 							</div>
