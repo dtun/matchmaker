@@ -48,3 +48,44 @@
 		@apply bg-background text-foreground;
 	}
 }
+
+/* Bokeh burst animations */
+@keyframes bokehFloat {
+	0%,
+	100% {
+		transform: translate(0, 0) scale(1);
+	}
+	33% {
+		transform: translate(10px, -10px) scale(1.05);
+	}
+	66% {
+		transform: translate(-10px, 10px) scale(0.95);
+	}
+}
+
+@keyframes bokehPulse {
+	0%,
+	100% {
+		opacity: 0.08;
+	}
+	50% {
+		opacity: 0.12;
+	}
+}
+
+@keyframes bokehFloatSlow {
+	0%,
+	100% {
+		transform: translate(0, 0) scale(1);
+	}
+	50% {
+		transform: translate(-15px, 15px) scale(1.08);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	* {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+	}
+}

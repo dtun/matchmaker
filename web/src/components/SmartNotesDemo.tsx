@@ -3,6 +3,37 @@ import { User, Sparkles, MessageSquare, Users } from "lucide-react";
 export function SmartNotesDemo() {
 	return (
 		<section className="relative bg-gray-100 py-24 sm:py-32 dark:bg-gray-900/95">
+			{/* Bokeh burst effects */}
+			<div
+				className="pointer-events-none absolute left-20 top-20 h-[400px] w-[400px] blur-3xl"
+				style={{
+					background:
+						"radial-gradient(circle, rgba(14, 165, 233, 0.6) 0%, rgba(168, 85, 247, 0.4) 30%, transparent 60%)",
+					animation: "bokehFloat 22s ease-in-out infinite",
+				}}
+				aria-hidden="true"
+			/>
+			<div
+				className="pointer-events-none absolute bottom-40 right-20 h-[500px] w-[500px] blur-3xl"
+				style={{
+					background:
+						"radial-gradient(circle, rgba(99, 102, 241, 0.7) 0%, rgba(14, 165, 233, 0.4) 30%, transparent 60%)",
+					animation: "bokehFloatSlow 28s ease-in-out infinite",
+					animationDelay: "4s",
+				}}
+				aria-hidden="true"
+			/>
+			<div
+				className="pointer-events-none absolute right-1/3 top-1/2 h-[220px] w-[220px] blur-3xl"
+				style={{
+					background:
+						"radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, rgba(99, 102, 241, 0.4) 30%, transparent 60%)",
+					animation: "bokehFloat 18s ease-in-out infinite",
+					animationDelay: "7s",
+				}}
+				aria-hidden="true"
+			/>
+
 			<div className="mx-auto max-w-7xl px-6 lg:px-8">
 				<div className="mx-auto max-w-2xl text-center">
 					<h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl dark:text-gray-100">

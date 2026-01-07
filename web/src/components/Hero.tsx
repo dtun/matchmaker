@@ -71,6 +71,37 @@ export function Hero() {
 					}}
 				/>
 			</div>
+
+			{/* Bokeh burst effects */}
+			<div
+				className="pointer-events-none absolute right-10 top-20 h-[400px] w-[400px] blur-3xl"
+				style={{
+					background:
+						"radial-gradient(circle, rgba(14, 165, 233, 0.6) 0%, rgba(99, 102, 241, 0.4) 30%, transparent 60%)",
+					animation: "bokehFloat 20s ease-in-out infinite",
+				}}
+				aria-hidden="true"
+			/>
+			<div
+				className="pointer-events-none absolute left-20 top-1/3 h-[350px] w-[350px] blur-3xl"
+				style={{
+					background:
+						"radial-gradient(circle, rgba(99, 102, 241, 0.7) 0%, rgba(14, 165, 233, 0.4) 30%, transparent 60%)",
+					animation: "bokehFloatSlow 25s ease-in-out infinite",
+					animationDelay: "5s",
+				}}
+				aria-hidden="true"
+			/>
+			<div
+				className="pointer-events-none absolute bottom-32 right-1/3 h-[250px] w-[250px] blur-3xl"
+				style={{
+					background:
+						"radial-gradient(circle, rgba(168, 85, 247, 0.6) 0%, rgba(14, 165, 233, 0.4) 30%, transparent 60%)",
+					animation: "bokehFloat 18s ease-in-out infinite",
+					animationDelay: "2s",
+				}}
+				aria-hidden="true"
+			/>
 		</section>
 	);
 }
