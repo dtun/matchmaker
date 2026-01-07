@@ -43,9 +43,8 @@ export function SmartNotesDemo() {
 							powerful results
 						</span>
 					</h2>
-					<p className="mt-6 font-display font-light text-lg leading-8 text-gray-600 dark:text-gray-400">
+					<p className="font-display mt-6 text-lg font-light leading-8 text-gray-600 dark:text-gray-400">
 						Use The Introduction in Claude Chat, ChatGPT, or our mobile app
-						(coming soon)
 					</p>
 				</div>
 
@@ -70,7 +69,7 @@ export function SmartNotesDemo() {
 						</div>
 
 						{/* Chat messages */}
-						<div className="space-y-6 bg-gray-50 p-6 dark:bg-gray-900/50 sm:p-8">
+						<div className="space-y-6 bg-gray-50 p-6 sm:p-8 dark:bg-gray-900/50">
 							{/* User message 1 */}
 							<div className="space-y-2">
 								<div className="flex items-center justify-end gap-2 text-xs font-medium text-sky-600 dark:text-sky-400">
@@ -104,8 +103,8 @@ export function SmartNotesDemo() {
 											<Sparkles className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
 										</div>
 									</div>
-									<div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-white px-4 py-3 shadow-md dark:bg-gray-800 sm:max-w-[75%]">
-										<p className="text-sm leading-relaxed text-gray-900 dark:text-gray-100 sm:text-base">
+									<div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-white px-4 py-3 shadow-md sm:max-w-[75%] dark:bg-gray-800">
+										<p className="text-sm leading-relaxed text-gray-900 sm:text-base dark:text-gray-100">
 											I've added Sarah to your network with the details you
 											provided. Would you like me to suggest any potential
 											matches from your existing connections?
@@ -140,12 +139,12 @@ export function SmartNotesDemo() {
 											<Sparkles className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
 										</div>
 									</div>
-									<div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-white px-4 py-3 shadow-md dark:bg-gray-800 sm:max-w-[75%]">
-										<p className="text-sm leading-relaxed text-gray-900 dark:text-gray-100 sm:text-base">
+									<div className="max-w-[85%] rounded-2xl rounded-tl-sm bg-white px-4 py-3 shadow-md sm:max-w-[75%] dark:bg-gray-800">
+										<p className="text-sm leading-relaxed text-gray-900 sm:text-base dark:text-gray-100">
 											Based on your notes, Alex (29, outdoor enthusiast,
 											software engineer) shares similar interests with Sarah.
-											They both enjoy hiking and work in tech. Would you like
-											to make this introduction?
+											They both enjoy hiking and work in tech. Would you like to
+											make this introduction?
 										</p>
 									</div>
 								</div>
@@ -180,8 +179,8 @@ export function SmartNotesDemo() {
 								<h4 className="mt-6 text-lg font-bold text-gray-900 dark:text-gray-100">
 									Choose your platform
 								</h4>
-								<p className="mt-3 font-display font-normal text-base text-gray-600 dark:text-gray-400">
-									Claude, ChatGPT, or mobile app (coming soon)
+								<p className="font-display mt-3 text-base font-normal text-gray-600 dark:text-gray-400">
+									Claude, ChatGPT, or mobile app
 								</p>
 							</div>
 							<div className="group text-center">
@@ -191,7 +190,7 @@ export function SmartNotesDemo() {
 								<h4 className="mt-6 text-lg font-bold text-gray-900 dark:text-gray-100">
 									Add people and details
 								</h4>
-								<p className="mt-3 font-display font-normal text-base text-gray-600 dark:text-gray-400">
+								<p className="font-display mt-3 text-base font-normal text-gray-600 dark:text-gray-400">
 									Use natural conversation to keep track of friends and family
 								</p>
 							</div>
@@ -202,7 +201,7 @@ export function SmartNotesDemo() {
 								<h4 className="mt-6 text-lg font-bold text-gray-900 dark:text-gray-100">
 									Get smart suggestions
 								</h4>
-								<p className="mt-3 font-display font-normal text-base text-gray-600 dark:text-gray-400">
+								<p className="font-display mt-3 text-base font-normal text-gray-600 dark:text-gray-400">
 									AI helps you make great matches - you make the final call
 								</p>
 							</div>
