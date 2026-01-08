@@ -1,6 +1,13 @@
 "use client";
 
-import { User, Sparkles, MessageSquare } from "lucide-react";
+import {
+	User,
+	Sparkles,
+	MessageSquare,
+	Heart,
+	Cloud,
+	Check,
+} from "lucide-react";
 import { Button } from "./ui";
 
 export function Hero() {
@@ -15,21 +22,14 @@ export function Hero() {
 		<section className="relative overflow-hidden bg-gray-50 py-24 sm:py-32 dark:bg-gray-900">
 			<div className="mx-auto max-w-7xl px-6 lg:px-8">
 				<div className="mx-auto max-w-3xl text-center">
-					{/* Brand Logo/Name */}
-					<div className="mb-10">
-						<h1 className="bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent sm:text-6xl dark:from-sky-400 dark:to-indigo-400">
-							The Introduction
-						</h1>
-					</div>
-
 					{/* Main Headline */}
-					<h2 className="text-5xl font-extrabold tracking-tight text-gray-900 sm:text-6xl lg:text-7xl dark:text-gray-100">
-						Your matchmaking,{" "}
-						<span className="text-sky-600 dark:text-sky-400">supercharged</span>
-					</h2>
+					<h1 className="text-5xl font-extrabold tracking-tight text-gray-900 sm:text-6xl lg:text-7xl dark:text-gray-100">
+						<span className="text-sky-600 dark:text-sky-400">Supercharge</span>{" "}
+						your matchmaking
+					</h1>
 
 					{/* Subheadline */}
-					<p className="mt-8 font-display font-light text-xl leading-relaxed text-gray-600 dark:text-gray-400">
+					<p className="font-display mt-8 text-xl font-light leading-relaxed text-gray-600 dark:text-gray-400">
 						AI-powered smart notes that help you connect friends and family with
 						confidence. Work in Claude, ChatGPT, or our mobile app.
 					</p>
@@ -53,14 +53,14 @@ export function Hero() {
 						<div className="border-b border-gray-200 bg-gradient-to-r from-sky-50 to-indigo-50 px-6 py-4 dark:border-gray-700 dark:from-gray-800 dark:to-gray-800">
 							<div className="flex items-center gap-3">
 								<div className="rounded-full bg-gradient-to-br from-sky-400 to-indigo-600 p-2 shadow-lg">
-									<Sparkles className="h-5 w-5 text-white" />
+									<Check className="h-5 w-5 text-white" />
 								</div>
 								<div>
-									<h3 className="font-semibold text-gray-900 dark:text-gray-100">
-										The Introduction
-									</h3>
+									<h2 className="font-semibold text-gray-900 dark:text-gray-100">
+										Matchmkr Pro
+									</h2>
 									<p className="text-xs text-gray-500 dark:text-gray-400">
-										Smart networking assistant
+										by The Introduction
 									</p>
 								</div>
 							</div>
@@ -92,7 +92,7 @@ export function Hero() {
 							{/* AI response 1 */}
 							<div className="space-y-2">
 								<div className="flex items-center gap-2 text-xs font-medium text-indigo-600 dark:text-indigo-400">
-									<Sparkles className="h-3.5 w-3.5" />
+									<Cloud className="h-3.5 w-3.5" />
 									<span>AI understands context</span>
 								</div>
 								<div className="flex items-start gap-3">
@@ -128,7 +128,7 @@ export function Hero() {
 							{/* AI suggestion */}
 							<div className="space-y-2">
 								<div className="flex items-center gap-2 text-xs font-medium text-purple-600 dark:text-purple-400">
-									<Sparkles className="h-3.5 w-3.5" />
+									<Heart className="h-3.5 w-3.5" />
 									<span>Smart matching</span>
 								</div>
 								<div className="flex items-start gap-3">
@@ -149,16 +149,16 @@ export function Hero() {
 							</div>
 
 							{/* Typing indicator */}
-							<div className="flex items-start gap-3">
+							<div className="flex justify-end gap-3">
+								<div className="flex items-center space-x-1 rounded-2xl rounded-tr-sm bg-white px-4 py-3 shadow-md dark:bg-gray-800">
+									<div className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.3s]"></div>
+									<div className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.15s]"></div>
+									<div className="h-2 w-2 animate-bounce rounded-full bg-gray-400"></div>
+								</div>
 								<div className="flex-shrink-0">
 									<div className="flex h-8 w-8 items-center justify-center rounded-full bg-sky-100 dark:bg-sky-900/50">
 										<User className="h-4 w-4 text-sky-600 dark:text-sky-400" />
 									</div>
-								</div>
-								<div className="flex items-center space-x-1 rounded-2xl rounded-tl-sm bg-white px-4 py-3 shadow-md dark:bg-gray-800">
-									<div className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.3s]"></div>
-									<div className="h-2 w-2 animate-bounce rounded-full bg-gray-400 [animation-delay:-0.15s]"></div>
-									<div className="h-2 w-2 animate-bounce rounded-full bg-gray-400"></div>
 								</div>
 							</div>
 						</div>
