@@ -57,10 +57,10 @@ export default function Home() {
 												</svg>
 											</div>
 											<h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-												Join the Waitlist
+												Claim Your Spot
 											</h2>
 											<p className="mt-3 font-display font-normal text-gray-600 dark:text-gray-400">
-												For matchmakers who want to connect friends and family
+												For the friends who always know who should meet who
 											</p>
 										</div>
 										<div className="mt-8">
@@ -71,7 +71,7 @@ export default function Home() {
 												onClick={() => setActiveForm("single")}
 												className="text-sm font-medium text-gray-500 transition-colors hover:text-sky-600 dark:text-gray-400 dark:hover:text-sky-400"
 											>
-												Not a matchmaker?
+												Know a great matchmaker?
 											</button>
 										</div>
 									</>
