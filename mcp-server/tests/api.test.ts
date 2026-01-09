@@ -133,4 +133,56 @@ describe('ApiClient', () => {
 		expect(result.id).toBe('550e8400-e29b-41d4-a716-446655440000')
 		expect(result.notes).toBe('Updated notes')
 	})
+
+	test('createIntroduction(person_a_id, person_b_id) makes POST with Bearer token', async () => {
+		let client = new ApiClient(config)
+		let result = await client.createIntroduction(
+			'550e8400-e29b-41d4-a716-446655440001',
+			'550e8400-e29b-41d4-a716-446655440002'
+		)
+
+		expect(result.id).toBe('770e8400-e29b-41d4-a716-446655440000')
+		expect(result.person_a_id).toBe('550e8400-e29b-41d4-a716-446655440001')
+		expect(result.person_b_id).toBe('550e8400-e29b-41d4-a716-446655440002')
+		expect(result.status).toBe('pending')
+		expect(result.matchmaker_id).toBe('123e4567-e89b-12d3-a456-426614174000')
+	})
+
+	test('createIntroduction(person_a_id, person_b_id, notes) includes notes in request', async () => {
+		let client = new ApiClient(config)
+		let result = await client.createIntroduction(
+			'550e8400-e29b-41d4-a716-446655440001',
+			'550e8400-e29b-41d4-a716-446655440002',
+			'They have similar interests'
+		)
+
+		expect(result.notes).toBe('They have similar interests')
+	})
+
+	test('createIntroduction validates person_a_id is a valid UUID', async () => {
+		let client = new ApiClient(config)
+		await expect(
+			client.createIntroduction('invalid-uuid', '550e8400-e29b-41d4-a716-446655440002')
+		).rejects.toThrow('person_a_id must be a valid UUID')
+	})
+
+	test('createIntroduction validates person_b_id is a valid UUID', async () => {
+		let client = new ApiClient(config)
+		await expect(
+			client.createIntroduction('550e8400-e29b-41d4-a716-446655440001', 'invalid-uuid')
+		).rejects.toThrow('person_b_id must be a valid UUID')
+	})
+
+	test('createIntroduction throws on 401 unauthorized', async () => {
+		let invalidClient = new ApiClient({
+			...config,
+			auth_token: 'invalid-token',
+		})
+		await expect(
+			invalidClient.createIntroduction(
+				'550e8400-e29b-41d4-a716-446655440001',
+				'550e8400-e29b-41d4-a716-446655440002'
+			)
+		).rejects.toThrow()
+	})
 })

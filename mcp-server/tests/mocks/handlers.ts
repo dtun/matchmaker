@@ -105,4 +105,30 @@ export let handlers = [
 			updated_at: new Date().toISOString(),
 		})
 	}),
+
+	// POST /api/introductions - Success
+	http.post(`${BASE_URL}/api/introductions`, async ({ request }) => {
+		let auth = request.headers.get('Authorization')
+		if (auth !== 'Bearer valid-token') {
+			return HttpResponse.json({ error: 'Unauthorized' }, { status: 401 })
+		}
+		let body = (await request.json()) as {
+			person_a_id: string
+			person_b_id: string
+			notes?: string
+		}
+		return HttpResponse.json(
+			{
+				id: '770e8400-e29b-41d4-a716-446655440000',
+				matchmaker_id: '123e4567-e89b-12d3-a456-426614174000',
+				person_a_id: body.person_a_id,
+				person_b_id: body.person_b_id,
+				status: 'pending',
+				notes: body.notes ?? null,
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString(),
+			},
+			{ status: 201 }
+		)
+	}),
 ]

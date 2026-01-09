@@ -68,6 +68,19 @@ export function createServer(apiClient: ApiClient) {
 					required: ['id'],
 				},
 			},
+			{
+				name: 'create_introduction',
+				description: 'Create an introduction between two people',
+				inputSchema: {
+					type: 'object',
+					properties: {
+						person_a_id: { type: 'string', description: 'First person ID (UUID)' },
+						person_b_id: { type: 'string', description: 'Second person ID (UUID)' },
+						notes: { type: 'string', description: 'Notes about the introduction' },
+					},
+					required: ['person_a_id', 'person_b_id'],
+				},
+			},
 		],
 	}))
 
@@ -138,6 +151,35 @@ export function createServer(apiClient: ApiClient) {
 					notes?: string
 				}
 				let result = await apiClient.updatePerson(id, updates)
+				return {
+					content: [
+						{
+							type: 'text',
+							text: JSON.stringify(result, null, 2),
+						},
+					],
+				}
+			}
+
+			if (name === 'create_introduction') {
+				if (
+					!args ||
+					typeof args !== 'object' ||
+					!('person_a_id' in args) ||
+					typeof args.person_a_id !== 'string' ||
+					!('person_b_id' in args) ||
+					typeof args.person_b_id !== 'string'
+				) {
+					throw new Error(
+						'Invalid arguments: person_a_id and person_b_id are required and must be strings'
+					)
+				}
+				let { person_a_id, person_b_id, notes } = args as {
+					person_a_id: string
+					person_b_id: string
+					notes?: string
+				}
+				let result = await apiClient.createIntroduction(person_a_id, person_b_id, notes)
 				return {
 					content: [
 						{

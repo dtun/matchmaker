@@ -1,5 +1,5 @@
 import { describe, test, expect, mock } from 'bun:test'
-import type { ApiClient, Person } from '../src/api'
+import type { ApiClient, Person, Introduction } from '../src/api'
 
 function createMockApiClient(overrides?: Partial<ApiClient>): ApiClient {
 	return {
@@ -49,6 +49,22 @@ function createMockApiClient(overrides?: Partial<ApiClient>): ApiClient {
 				personality: _updates.personality ?? null,
 				notes: _updates.notes ?? null,
 				active: true,
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString(),
+			})
+		),
+		createIntroduction: mock(
+			async (
+				_person_a_id: string,
+				_person_b_id: string,
+				_notes?: string
+			): Promise<Introduction> => ({
+				id: 'intro-id',
+				matchmaker_id: 'user-id',
+				person_a_id: _person_a_id,
+				person_b_id: _person_b_id,
+				status: 'pending',
+				notes: _notes ?? null,
 				created_at: new Date().toISOString(),
 				updated_at: new Date().toISOString(),
 			})
@@ -236,5 +252,45 @@ describe('MCP Server', () => {
 		expect(result.name).toBe('Bob')
 		expect(result.age).toBe(35)
 		expect(result.location).toBe('Chicago')
+	})
+
+	test('API client handles create_introduction correctly (unit test)', async () => {
+		let mockCreateIntroduction = mock(
+			async (
+				_person_a_id: string,
+				_person_b_id: string,
+				_notes?: string
+			): Promise<Introduction> => ({
+				id: 'intro-id',
+				matchmaker_id: 'user-id',
+				person_a_id: _person_a_id,
+				person_b_id: _person_b_id,
+				status: 'pending',
+				notes: _notes ?? null,
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString(),
+			})
+		)
+
+		let mockApiClient = createMockApiClient({
+			createIntroduction: mockCreateIntroduction,
+		})
+
+		let result = await mockApiClient.createIntroduction(
+			'person-a-uuid',
+			'person-b-uuid',
+			'They both love hiking'
+		)
+
+		expect(mockCreateIntroduction).toHaveBeenCalledWith(
+			'person-a-uuid',
+			'person-b-uuid',
+			'They both love hiking'
+		)
+		expect(result.id).toBe('intro-id')
+		expect(result.person_a_id).toBe('person-a-uuid')
+		expect(result.person_b_id).toBe('person-b-uuid')
+		expect(result.status).toBe('pending')
+		expect(result.notes).toBe('They both love hiking')
 	})
 })

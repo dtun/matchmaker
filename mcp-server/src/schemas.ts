@@ -18,3 +18,18 @@ export const personResponseSchema = z
 	.passthrough()
 
 export const peopleListResponseSchema = z.array(personResponseSchema)
+
+export const introductionResponseSchema = z
+	.object({
+		id: z.string().uuid(),
+		matchmaker_id: z.string().uuid(),
+		person_a_id: z.string().uuid(),
+		person_b_id: z.string().uuid(),
+		status: z.string(),
+		notes: z.string().nullable(),
+		created_at: z.string(),
+		updated_at: z.string(),
+	})
+	.passthrough()
+
+export const introductionsListResponseSchema = z.array(introductionResponseSchema)

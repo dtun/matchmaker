@@ -1,6 +1,10 @@
 import { z } from 'zod'
 import type { Config } from './config'
-import { personResponseSchema, peopleListResponseSchema } from './schemas'
+import {
+	personResponseSchema,
+	peopleListResponseSchema,
+	introductionResponseSchema,
+} from './schemas'
 
 let addPersonInputSchema = z.object({
 	name: z.string().min(1, 'Name is required'),
@@ -21,6 +25,12 @@ let updatePersonInputSchema = z.object({
 	notes: z.string().optional(),
 })
 
+let createIntroductionInputSchema = z.object({
+	person_a_id: z.string().uuid('person_a_id must be a valid UUID'),
+	person_b_id: z.string().uuid('person_b_id must be a valid UUID'),
+	notes: z.string().optional(),
+})
+
 export interface Person {
 	id: string
 	name: string
@@ -32,6 +42,17 @@ export interface Person {
 	personality?: object | null
 	notes?: string | null
 	active: boolean
+	created_at: string
+	updated_at: string
+}
+
+export interface Introduction {
+	id: string
+	matchmaker_id: string
+	person_a_id: string
+	person_b_id: string
+	status: string
+	notes?: string | null
 	created_at: string
 	updated_at: string
 }
@@ -139,5 +160,37 @@ export class ApiClient {
 		}
 
 		return this.parseResponse(response, personResponseSchema)
+	}
+
+	async createIntroduction(
+		person_a_id: string,
+		person_b_id: string,
+		notes?: string
+	): Promise<Introduction> {
+		// Validate input
+		createIntroductionInputSchema.parse({ person_a_id, person_b_id, notes })
+
+		let body: { person_a_id: string; person_b_id: string; notes?: string } = {
+			person_a_id,
+			person_b_id,
+		}
+		if (notes !== undefined) {
+			body.notes = notes
+		}
+
+		let response = await fetch(`${this.config.api_base_url}/api/introductions`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${this.config.auth_token}`,
+			},
+			body: JSON.stringify(body),
+		})
+
+		if (!response.ok) {
+			throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+		}
+
+		return this.parseResponse(response, introductionResponseSchema)
 	}
 }
