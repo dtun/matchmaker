@@ -1,22 +1,39 @@
 import { describe, test, expect, mock } from 'bun:test'
 import type { ApiClient, Person } from '../src/api'
 
+function createMockApiClient(overrides?: Partial<ApiClient>): ApiClient {
+	return {
+		addPerson: mock(
+			async (_name: string): Promise<Person> => ({
+				id: 'test-id',
+				name: _name,
+				matchmaker_id: 'user-id',
+				active: true,
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString(),
+			})
+		),
+		listPeople: mock(async (): Promise<Person[]> => []),
+		getPerson: mock(
+			async (_id: string): Promise<Person> => ({
+				id: _id,
+				name: 'Alice',
+				matchmaker_id: 'user-id',
+				age: 28,
+				location: 'New York',
+				active: true,
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString(),
+			})
+		),
+		...overrides,
+	} as unknown as ApiClient
+}
+
 describe('MCP Server', () => {
 	test('createServer() returns server instance', async () => {
 		let { createServer } = await import('../src/index')
-		let mockApiClient = {
-			addPerson: mock(
-				async (_name: string): Promise<Person> => ({
-					id: 'test-id',
-					name: _name,
-					matchmaker_id: 'user-id',
-					active: true,
-					created_at: new Date().toISOString(),
-					updated_at: new Date().toISOString(),
-				})
-			),
-			listPeople: mock(async (): Promise<Person[]> => []),
-		} as unknown as ApiClient
+		let mockApiClient = createMockApiClient()
 
 		let server = createServer(mockApiClient)
 
@@ -26,19 +43,7 @@ describe('MCP Server', () => {
 
 	test('createServer() sets up request handlers without errors', async () => {
 		let { createServer } = await import('../src/index')
-		let mockApiClient = {
-			addPerson: mock(
-				async (_name: string): Promise<Person> => ({
-					id: 'test-id',
-					name: _name,
-					matchmaker_id: 'user-id',
-					active: true,
-					created_at: new Date().toISOString(),
-					updated_at: new Date().toISOString(),
-				})
-			),
-			listPeople: mock(async (): Promise<Person[]> => []),
-		} as unknown as ApiClient
+		let mockApiClient = createMockApiClient()
 
 		// Should not throw when creating server and setting up handlers
 		expect(() => createServer(mockApiClient)).not.toThrow()
@@ -119,12 +124,11 @@ describe('MCP Server', () => {
 	})
 
 	test('error handling preserves error messages (unit test)', async () => {
-		let mockApiClient = {
+		let mockApiClient = createMockApiClient({
 			addPerson: mock(async (_name: string): Promise<Person> => {
 				throw new Error('API Error: Unauthorized')
 			}),
-			listPeople: mock(async (): Promise<Person[]> => []),
-		} as unknown as ApiClient
+		})
 
 		// Simulate what the handler does with errors
 		try {
@@ -136,5 +140,32 @@ describe('MCP Server', () => {
 				expect(error.message).toContain('Unauthorized')
 			}
 		}
+	})
+
+	test('API client handles get_person correctly (unit test)', async () => {
+		let mockGetPerson = mock(
+			async (_id: string): Promise<Person> => ({
+				id: _id,
+				name: 'Alice',
+				matchmaker_id: 'user-id',
+				age: 28,
+				location: 'New York',
+				active: true,
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString(),
+			})
+		)
+
+		let mockApiClient = createMockApiClient({
+			getPerson: mockGetPerson,
+		})
+
+		let result = await mockApiClient.getPerson('test-person-id')
+
+		expect(mockGetPerson).toHaveBeenCalledWith('test-person-id')
+		expect(result.id).toBe('test-person-id')
+		expect(result.name).toBe('Alice')
+		expect(result.age).toBe(28)
+		expect(result.location).toBe('New York')
 	})
 })

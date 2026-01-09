@@ -52,4 +52,30 @@ export let handlers = [
 			},
 		])
 	}),
+
+	// GET /api/people/:id - Success
+	http.get(`${BASE_URL}/api/people/:id`, ({ request, params }) => {
+		let auth = request.headers.get('Authorization')
+		if (auth !== 'Bearer valid-token') {
+			return HttpResponse.json({ error: 'Unauthorized' }, { status: 401 })
+		}
+		let { id } = params
+		if (id === 'not-found-id') {
+			return HttpResponse.json({ error: 'Person not found' }, { status: 404 })
+		}
+		return HttpResponse.json({
+			id: id,
+			name: 'Alice',
+			matchmaker_id: '123e4567-e89b-12d3-a456-426614174000',
+			age: 28,
+			location: 'New York',
+			gender: 'female',
+			preferences: { ageRange: [25, 35] },
+			personality: { introvert: false },
+			notes: 'Looking for someone creative',
+			active: true,
+			created_at: new Date().toISOString(),
+			updated_at: new Date().toISOString(),
+		})
+	}),
 ]

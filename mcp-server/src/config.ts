@@ -11,8 +11,7 @@ let configSchema = z.object({
 export type Config = z.infer<typeof configSchema>
 
 export async function loadConfig(customPath?: string): Promise<Config> {
-	let configPath =
-		customPath || join(homedir(), '.config', 'matchmaker-mcp', 'config.json')
+	let configPath = customPath || join(homedir(), '.config', 'matchmaker-mcp', 'config.json')
 	let content = await readFile(configPath, 'utf-8')
 	let parsed = JSON.parse(content)
 	return configSchema.parse(parsed)

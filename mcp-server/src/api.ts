@@ -6,6 +6,10 @@ let addPersonInputSchema = z.object({
 	name: z.string().min(1, 'Name is required'),
 })
 
+let getPersonInputSchema = z.object({
+	id: z.string().min(1, 'ID is required'),
+})
+
 export interface Person {
 	id: string
 	name: string
@@ -75,5 +79,23 @@ export class ApiClient {
 		}
 
 		return this.parseResponse(response, peopleListResponseSchema)
+	}
+
+	async getPerson(id: string): Promise<Person> {
+		// Validate input
+		getPersonInputSchema.parse({ id })
+
+		let response = await fetch(`${this.config.api_base_url}/api/people/${id}`, {
+			method: 'GET',
+			headers: {
+				Authorization: `Bearer ${this.config.auth_token}`,
+			},
+		})
+
+		if (!response.ok) {
+			throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+		}
+
+		return this.parseResponse(response, personResponseSchema)
 	}
 }

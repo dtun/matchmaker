@@ -1,9 +1,6 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js'
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
-import {
-	CallToolRequestSchema,
-	ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js'
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js'
 import { loadConfig } from './config.js'
 import { ApiClient } from './api.js'
 
@@ -42,11 +39,22 @@ export function createServer(apiClient: ApiClient) {
 					properties: {},
 				},
 			},
+			{
+				name: 'get_person',
+				description: 'Retrieve detailed information about a specific person',
+				inputSchema: {
+					type: 'object',
+					properties: {
+						id: { type: 'string', description: 'Person ID (UUID)' },
+					},
+					required: ['id'],
+				},
+			},
 		],
 	}))
 
 	// Handle tool calls
-	server.setRequestHandler(CallToolRequestSchema, async (request) => {
+	server.setRequestHandler(CallToolRequestSchema, async request => {
 		let { name, arguments: args } = request.params
 
 		try {
@@ -72,6 +80,21 @@ export function createServer(apiClient: ApiClient) {
 
 			if (name === 'list_people') {
 				let result = await apiClient.listPeople()
+				return {
+					content: [
+						{
+							type: 'text',
+							text: JSON.stringify(result, null, 2),
+						},
+					],
+				}
+			}
+
+			if (name === 'get_person') {
+				if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
+					throw new Error('Invalid arguments: id is required and must be a string')
+				}
+				let result = await apiClient.getPerson(args.id)
 				return {
 					content: [
 						{
@@ -113,7 +136,7 @@ async function runServer() {
 
 	// Set up signal handlers for graceful shutdown
 	let shutdown = async () => {
-		console.error("Shutting down MCP server...")
+		console.error('Shutting down MCP server...')
 		await transport.close()
 		process.exit(0)
 	}
@@ -123,13 +146,13 @@ async function runServer() {
 
 	// Connect and start listening
 	await server.connect(transport)
-	console.error("MCP Server running on stdio")
+	console.error('MCP Server running on stdio')
 }
 
 // Run server with error handling
 if (import.meta.main) {
-	runServer().catch((error) => {
-		console.error("Fatal error in MCP server:", error)
+	runServer().catch(error => {
+		console.error('Fatal error in MCP server:', error)
 		process.exit(1)
 	})
 }
