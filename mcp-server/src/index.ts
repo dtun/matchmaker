@@ -128,6 +128,17 @@ export function createServer(apiClient: ApiClient) {
 					required: ['id'],
 				},
 			},
+			{
+				name: 'get_introduction',
+				description: 'Get details of a specific introduction',
+				inputSchema: {
+					type: 'object',
+					properties: {
+						id: { type: 'string', description: 'Introduction ID (UUID)' },
+					},
+					required: ['id'],
+				},
+			},
 		],
 	}))
 
@@ -294,6 +305,21 @@ export function createServer(apiClient: ApiClient) {
 					throw new Error('Invalid arguments: id is required and must be a string')
 				}
 				let result = await apiClient.deletePerson(args.id)
+				return {
+					content: [
+						{
+							type: 'text',
+							text: JSON.stringify(result, null, 2),
+						},
+					],
+				}
+			}
+
+			if (name === 'get_introduction') {
+				if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
+					throw new Error('Invalid arguments: id is required and must be a string')
+				}
+				let result = await apiClient.getIntroduction(args.id)
 				return {
 					content: [
 						{

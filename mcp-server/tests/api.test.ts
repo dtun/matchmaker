@@ -332,4 +332,34 @@ describe('ApiClient', () => {
 		let client = new ApiClient(config)
 		await expect(client.deletePerson('not-found-id')).rejects.toThrow('HTTP 404')
 	})
+
+	test('getIntroduction(id) makes GET with Bearer token', async () => {
+		let client = new ApiClient(config)
+		let result = await client.getIntroduction('770e8400-e29b-41d4-a716-446655440000')
+
+		expect(result.id).toBe('770e8400-e29b-41d4-a716-446655440000')
+		expect(result.matchmaker_id).toBe('123e4567-e89b-12d3-a456-426614174000')
+		expect(result.person_a_id).toBe('550e8400-e29b-41d4-a716-446655440001')
+		expect(result.person_b_id).toBe('550e8400-e29b-41d4-a716-446655440002')
+		expect(result.status).toBe('pending')
+		expect(result.notes).toBe('Both enjoy hiking')
+	})
+
+	test('getIntroduction(id) validates id is not empty', async () => {
+		let client = new ApiClient(config)
+		await expect(client.getIntroduction('')).rejects.toThrow('ID is required')
+	})
+
+	test('getIntroduction(id) throws on 401 unauthorized', async () => {
+		let invalidClient = new ApiClient({
+			...config,
+			auth_token: 'invalid-token',
+		})
+		await expect(invalidClient.getIntroduction('test-id')).rejects.toThrow()
+	})
+
+	test('getIntroduction(id) throws on 404 not found', async () => {
+		let client = new ApiClient(config)
+		await expect(client.getIntroduction('not-found-id')).rejects.toThrow('HTTP 404')
+	})
 })

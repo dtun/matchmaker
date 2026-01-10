@@ -101,6 +101,18 @@ function createMockApiClient(overrides?: Partial<ApiClient>): ApiClient {
 				updated_at: new Date().toISOString(),
 			})
 		),
+		getIntroduction: mock(
+			async (_id: string): Promise<Introduction> => ({
+				id: _id,
+				matchmaker_id: 'user-id',
+				person_a_id: 'person-a-uuid',
+				person_b_id: 'person-b-uuid',
+				status: 'pending',
+				notes: 'Both enjoy hiking',
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString(),
+			})
+		),
 		...overrides,
 	} as unknown as ApiClient
 }
@@ -452,5 +464,34 @@ describe('MCP Server', () => {
 		expect(result.id).toBe('person-uuid')
 		expect(result.name).toBe('Alice')
 		expect(result.active).toBe(false)
+	})
+
+	test('API client handles get_introduction correctly (unit test)', async () => {
+		let mockGetIntroduction = mock(
+			async (_id: string): Promise<Introduction> => ({
+				id: _id,
+				matchmaker_id: 'user-id',
+				person_a_id: 'person-a-uuid',
+				person_b_id: 'person-b-uuid',
+				status: 'pending',
+				notes: 'Both enjoy hiking',
+				created_at: new Date().toISOString(),
+				updated_at: new Date().toISOString(),
+			})
+		)
+
+		let mockApiClient = createMockApiClient({
+			getIntroduction: mockGetIntroduction,
+		})
+
+		let result = await mockApiClient.getIntroduction('intro-uuid')
+
+		expect(mockGetIntroduction).toHaveBeenCalledWith('intro-uuid')
+		expect(result.id).toBe('intro-uuid')
+		expect(result.matchmaker_id).toBe('user-id')
+		expect(result.person_a_id).toBe('person-a-uuid')
+		expect(result.person_b_id).toBe('person-b-uuid')
+		expect(result.status).toBe('pending')
+		expect(result.notes).toBe('Both enjoy hiking')
 	})
 })
