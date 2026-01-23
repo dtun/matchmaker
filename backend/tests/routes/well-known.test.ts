@@ -126,7 +126,7 @@ describe('GET /.well-known/oauth-authorization-server', () => {
 
 type ProtectedResourceMetadata = {
 	resource: string
-	authorization_servers: string[]
+	authorization_servers: Array<{ issuer: string }>
 }
 
 describe('GET /.well-known/oauth-protected-resource', () => {
@@ -142,7 +142,7 @@ describe('GET /.well-known/oauth-protected-resource', () => {
 		expect(res.headers.get('Content-Type')).toContain('application/json')
 	})
 
-	test('should include authorization_servers array pointing to the issuer', async () => {
+	test('should include authorization_servers array with issuer objects per RFC 9728', async () => {
 		let app = new Hono()
 		app.route('/.well-known', createWellKnownRoutes())
 
@@ -154,7 +154,7 @@ describe('GET /.well-known/oauth-protected-resource', () => {
 		expect(body.authorization_servers).toBeDefined()
 		expect(Array.isArray(body.authorization_servers)).toBe(true)
 		expect(body.authorization_servers.length).toBeGreaterThan(0)
-		expect(body.authorization_servers[0]).toBe('http://localhost')
+		expect(body.authorization_servers[0].issuer).toBe('http://localhost')
 	})
 
 	test('should include resource identifier', async () => {

@@ -24,9 +24,10 @@ export let createWellKnownRoutes = (): Hono => {
 		let url = new URL(c.req.url)
 		let baseUrl = `${url.protocol}//${url.host}`
 
+		// RFC 9728 requires authorization_servers to be array of objects with issuer field
 		return c.json({
 			resource: baseUrl,
-			authorization_servers: [baseUrl],
+			authorization_servers: [{ issuer: baseUrl }],
 		})
 	})
 
