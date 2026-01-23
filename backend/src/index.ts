@@ -11,6 +11,7 @@ import { createOAuthRoutes } from './routes/oauth'
 import { createLoginRoutes } from './routes/login'
 import { createWellKnownRoutes } from './routes/well-known'
 import { createRegisterRoutes } from './routes/register'
+import { createMcpRoutes } from './routes/mcp'
 
 let app = new Hono()
 
@@ -62,6 +63,9 @@ if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
 	app.route('/api/introductions', createIntroductionsRoutes(supabaseClient))
 	app.route('/api/feedback', createFeedbackRoutes(supabaseClient))
 	app.route('/api/matches', createMatchesRoutes(supabaseClient))
+
+	// MCP Streamable HTTP endpoint (protected via route-level auth)
+	app.route('/mcp', createMcpRoutes(supabaseClient))
 }
 
 // Export for Bun server

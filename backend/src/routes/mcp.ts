@@ -1,0 +1,562 @@
+import { Hono } from 'hono'
+import type { Context, Next } from 'hono'
+import { cors } from 'hono/cors'
+import { HTTPException } from 'hono/http-exception'
+import { Server } from '@modelcontextprotocol/sdk/server/index.js'
+import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js'
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js'
+import type { SupabaseClient } from '../lib/supabase'
+
+type Env = {
+	Variables: {
+		userId: string
+	}
+}
+
+export let createMcpRoutes = (supabaseClient: SupabaseClient) => {
+	let app = new Hono<Env>()
+
+	// CORS middleware specifically for claude.ai
+	app.use(
+		'*',
+		cors({
+			origin: 'https://claude.ai',
+			allowMethods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+			allowHeaders: ['Authorization', 'Content-Type', 'Accept', 'Mcp-Session-Id'],
+			exposeHeaders: ['Mcp-Session-Id'],
+			credentials: true,
+		})
+	)
+
+	// Authentication middleware
+	let authMiddleware = async (c: Context<Env>, next: Next) => {
+		let authHeader = c.req.header('Authorization')
+
+		if (!authHeader) {
+			throw new HTTPException(401, { message: 'Unauthorized' })
+		}
+
+		let token = authHeader.replace('Bearer ', '')
+
+		if (token === authHeader) {
+			throw new HTTPException(401, { message: 'Unauthorized' })
+		}
+
+		let { data, error } = await supabaseClient.auth.getUser(token)
+
+		if (error || !data.user) {
+			throw new HTTPException(401, { message: 'Unauthorized' })
+		}
+
+		c.set('userId', data.user.id)
+		await next()
+	}
+
+	// Create MCP server with tools
+	let createMcpServer = (userId: string) => {
+		let server = new Server(
+			{
+				name: 'matchmaker-mcp',
+				version: '1.0.0',
+			},
+			{
+				capabilities: {
+					tools: {},
+				},
+			}
+		)
+
+		// Register tools - these tools call the internal API routes
+		server.setRequestHandler(ListToolsRequestSchema, async () => ({
+			tools: [
+				{
+					name: 'add_person',
+					description: 'Add a new person to the matchmaker',
+					inputSchema: {
+						type: 'object',
+						properties: {
+							name: { type: 'string', description: 'Person name' },
+						},
+						required: ['name'],
+					},
+				},
+				{
+					name: 'list_people',
+					description: 'List all people in the matchmaker',
+					inputSchema: {
+						type: 'object',
+						properties: {},
+					},
+				},
+				{
+					name: 'get_person',
+					description: 'Retrieve detailed information about a specific person',
+					inputSchema: {
+						type: 'object',
+						properties: {
+							id: { type: 'string', description: 'Person ID (UUID)' },
+						},
+						required: ['id'],
+					},
+				},
+				{
+					name: 'update_person',
+					description: "Update a person's profile information",
+					inputSchema: {
+						type: 'object',
+						properties: {
+							id: { type: 'string', description: 'Person ID (UUID)' },
+							name: { type: 'string', description: 'Person name' },
+							age: { type: 'number', description: 'Person age' },
+							location: { type: 'string', description: 'Person location' },
+							gender: { type: 'string', description: 'Person gender' },
+							preferences: { type: 'object', description: 'Person preferences' },
+							personality: { type: 'object', description: 'Person personality traits' },
+							notes: { type: 'string', description: 'Notes about the person' },
+						},
+						required: ['id'],
+					},
+				},
+				{
+					name: 'create_introduction',
+					description: 'Create an introduction between two people',
+					inputSchema: {
+						type: 'object',
+						properties: {
+							person_a_id: { type: 'string', description: 'First person ID (UUID)' },
+							person_b_id: { type: 'string', description: 'Second person ID (UUID)' },
+							notes: { type: 'string', description: 'Notes about the introduction' },
+						},
+						required: ['person_a_id', 'person_b_id'],
+					},
+				},
+				{
+					name: 'list_introductions',
+					description: 'List all introductions for the matchmaker',
+					inputSchema: {
+						type: 'object',
+						properties: {},
+					},
+				},
+				{
+					name: 'update_introduction',
+					description: 'Update introduction status or notes',
+					inputSchema: {
+						type: 'object',
+						properties: {
+							id: { type: 'string', description: 'Introduction ID (UUID)' },
+							status: {
+								type: 'string',
+								enum: ['pending', 'accepted', 'declined', 'dating', 'ended'],
+								description: 'Introduction status',
+							},
+							notes: { type: 'string', description: 'Notes about the introduction' },
+						},
+						required: ['id'],
+					},
+				},
+				{
+					name: 'find_matches',
+					description: 'Find compatible matches for a person',
+					inputSchema: {
+						type: 'object',
+						properties: {
+							person_id: {
+								type: 'string',
+								description: 'Person ID (UUID) to find matches for',
+							},
+						},
+						required: ['person_id'],
+					},
+				},
+				{
+					name: 'delete_person',
+					description: 'Soft-delete a person (sets active=false)',
+					inputSchema: {
+						type: 'object',
+						properties: {
+							id: { type: 'string', description: 'Person ID (UUID)' },
+						},
+						required: ['id'],
+					},
+				},
+				{
+					name: 'get_introduction',
+					description: 'Get details of a specific introduction',
+					inputSchema: {
+						type: 'object',
+						properties: {
+							id: { type: 'string', description: 'Introduction ID (UUID)' },
+						},
+						required: ['id'],
+					},
+				},
+				{
+					name: 'submit_feedback',
+					description: 'Submit feedback about an introduction',
+					inputSchema: {
+						type: 'object',
+						properties: {
+							introduction_id: { type: 'string', description: 'Introduction ID (UUID)' },
+							from_person_id: {
+								type: 'string',
+								description: 'Person ID (UUID) submitting the feedback',
+							},
+							content: { type: 'string', description: 'Feedback content' },
+							sentiment: {
+								type: 'string',
+								description: 'Feedback sentiment (e.g., positive, negative, neutral)',
+							},
+						},
+						required: ['introduction_id', 'from_person_id', 'content'],
+					},
+				},
+				{
+					name: 'list_feedback',
+					description: 'Get all feedback for a specific introduction',
+					inputSchema: {
+						type: 'object',
+						properties: {
+							introduction_id: { type: 'string', description: 'Introduction ID (UUID)' },
+						},
+						required: ['introduction_id'],
+					},
+				},
+				{
+					name: 'get_feedback',
+					description: 'Get a specific feedback record',
+					inputSchema: {
+						type: 'object',
+						properties: {
+							id: { type: 'string', description: 'Feedback ID (UUID)' },
+						},
+						required: ['id'],
+					},
+				},
+			],
+		}))
+
+		// Handle tool calls by making direct database calls
+		server.setRequestHandler(CallToolRequestSchema, async request => {
+			let { name, arguments: args } = request.params
+
+			try {
+				if (name === 'add_person') {
+					if (
+						!args ||
+						typeof args !== 'object' ||
+						!('name' in args) ||
+						typeof args.name !== 'string'
+					) {
+						throw new Error('Invalid arguments: name is required and must be a string')
+					}
+					let { data, error } = await supabaseClient
+						.from('people')
+						.insert({ name: args.name, matchmaker_id: userId })
+						.select()
+						.single()
+					if (error) throw new Error(error.message)
+					return {
+						content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+					}
+				}
+
+				if (name === 'list_people') {
+					let { data, error } = await supabaseClient
+						.from('people')
+						.select('*')
+						.eq('matchmaker_id', userId)
+						.eq('active', true)
+					if (error) throw new Error(error.message)
+					return {
+						content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+					}
+				}
+
+				if (name === 'get_person') {
+					if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
+						throw new Error('Invalid arguments: id is required and must be a string')
+					}
+					let { data, error } = await supabaseClient
+						.from('people')
+						.select('*')
+						.eq('id', args.id)
+						.eq('matchmaker_id', userId)
+						.single()
+					if (error) throw new Error(error.message)
+					return {
+						content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+					}
+				}
+
+				if (name === 'update_person') {
+					if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
+						throw new Error('Invalid arguments: id is required and must be a string')
+					}
+					let { id, ...updates } = args as Record<string, unknown>
+					let { data, error } = await supabaseClient
+						.from('people')
+						.update(updates)
+						.eq('id', id)
+						.eq('matchmaker_id', userId)
+						.select()
+						.single()
+					if (error) throw new Error(error.message)
+					return {
+						content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+					}
+				}
+
+				if (name === 'create_introduction') {
+					if (
+						!args ||
+						typeof args !== 'object' ||
+						!('person_a_id' in args) ||
+						typeof args.person_a_id !== 'string' ||
+						!('person_b_id' in args) ||
+						typeof args.person_b_id !== 'string'
+					) {
+						throw new Error(
+							'Invalid arguments: person_a_id and person_b_id are required and must be strings'
+						)
+					}
+					let { person_a_id, person_b_id, notes } = args as {
+						person_a_id: string
+						person_b_id: string
+						notes?: string
+					}
+					let { data, error } = await supabaseClient
+						.from('introductions')
+						.insert({
+							matchmaker_id: userId,
+							person_a_id,
+							person_b_id,
+							notes: notes || null,
+							status: 'pending',
+						})
+						.select()
+						.single()
+					if (error) throw new Error(error.message)
+					return {
+						content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+					}
+				}
+
+				if (name === 'list_introductions') {
+					let { data, error } = await supabaseClient
+						.from('introductions')
+						.select('*')
+						.eq('matchmaker_id', userId)
+					if (error) throw new Error(error.message)
+					return {
+						content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+					}
+				}
+
+				if (name === 'update_introduction') {
+					if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
+						throw new Error('Invalid arguments: id is required and must be a string')
+					}
+					let { id, ...updates } = args as Record<string, unknown>
+					let { data, error } = await supabaseClient
+						.from('introductions')
+						.update(updates)
+						.eq('id', id)
+						.eq('matchmaker_id', userId)
+						.select()
+						.single()
+					if (error) throw new Error(error.message)
+					return {
+						content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+					}
+				}
+
+				if (name === 'find_matches') {
+					if (
+						!args ||
+						typeof args !== 'object' ||
+						!('person_id' in args) ||
+						typeof args.person_id !== 'string'
+					) {
+						throw new Error('Invalid arguments: person_id is required and must be a string')
+					}
+					// Verify the person exists and belongs to this user
+					let { error: personError } = await supabaseClient
+						.from('people')
+						.select('id')
+						.eq('id', args.person_id)
+						.eq('matchmaker_id', userId)
+						.single()
+					if (personError) throw new Error(personError.message)
+
+					// Get all other active people
+					let { data: candidates, error: candidatesError } = await supabaseClient
+						.from('people')
+						.select('*')
+						.eq('matchmaker_id', userId)
+						.eq('active', true)
+						.neq('id', args.person_id)
+					if (candidatesError) throw new Error(candidatesError.message)
+
+					// Simple matching - return candidates with compatibility score
+					let matches = (candidates || []).map(candidate => ({
+						person: candidate,
+						compatibility_score: Math.random(), // Placeholder
+						reasons: ['Both are in the matchmaker system'],
+					}))
+					return {
+						content: [{ type: 'text', text: JSON.stringify(matches, null, 2) }],
+					}
+				}
+
+				if (name === 'delete_person') {
+					if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
+						throw new Error('Invalid arguments: id is required and must be a string')
+					}
+					let { data, error } = await supabaseClient
+						.from('people')
+						.update({ active: false })
+						.eq('id', args.id)
+						.eq('matchmaker_id', userId)
+						.select()
+						.single()
+					if (error) throw new Error(error.message)
+					return {
+						content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+					}
+				}
+
+				if (name === 'get_introduction') {
+					if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
+						throw new Error('Invalid arguments: id is required and must be a string')
+					}
+					let { data, error } = await supabaseClient
+						.from('introductions')
+						.select('*')
+						.eq('id', args.id)
+						.eq('matchmaker_id', userId)
+						.single()
+					if (error) throw new Error(error.message)
+					return {
+						content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+					}
+				}
+
+				if (name === 'submit_feedback') {
+					if (
+						!args ||
+						typeof args !== 'object' ||
+						!('introduction_id' in args) ||
+						typeof args.introduction_id !== 'string' ||
+						!('from_person_id' in args) ||
+						typeof args.from_person_id !== 'string' ||
+						!('content' in args) ||
+						typeof args.content !== 'string'
+					) {
+						throw new Error(
+							'Invalid arguments: introduction_id, from_person_id, and content are required and must be strings'
+						)
+					}
+					let { introduction_id, from_person_id, content, sentiment } = args as {
+						introduction_id: string
+						from_person_id: string
+						content: string
+						sentiment?: string
+					}
+					let { data, error } = await supabaseClient
+						.from('feedback')
+						.insert({
+							introduction_id,
+							from_person_id,
+							content,
+							sentiment: sentiment || null,
+						})
+						.select()
+						.single()
+					if (error) throw new Error(error.message)
+					return {
+						content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+					}
+				}
+
+				if (name === 'list_feedback') {
+					if (
+						!args ||
+						typeof args !== 'object' ||
+						!('introduction_id' in args) ||
+						typeof args.introduction_id !== 'string'
+					) {
+						throw new Error('Invalid arguments: introduction_id is required and must be a string')
+					}
+					let { data, error } = await supabaseClient
+						.from('feedback')
+						.select('*')
+						.eq('introduction_id', args.introduction_id)
+					if (error) throw new Error(error.message)
+					return {
+						content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+					}
+				}
+
+				if (name === 'get_feedback') {
+					if (!args || typeof args !== 'object' || !('id' in args) || typeof args.id !== 'string') {
+						throw new Error('Invalid arguments: id is required and must be a string')
+					}
+					let { data, error } = await supabaseClient
+						.from('feedback')
+						.select('*')
+						.eq('id', args.id)
+						.single()
+					if (error) throw new Error(error.message)
+					return {
+						content: [{ type: 'text', text: JSON.stringify(data, null, 2) }],
+					}
+				}
+
+				throw new Error(`Unknown tool: ${name}`)
+			} catch (error) {
+				let errorMessage = 'Unknown error'
+				if (error instanceof Error) {
+					errorMessage = error.message
+				} else if (typeof error === 'string') {
+					errorMessage = error
+				}
+				return {
+					content: [{ type: 'text', text: `Error: ${errorMessage}` }],
+					isError: true,
+				}
+			}
+		})
+
+		return server
+	}
+
+	// Handle all MCP requests
+	app.all('/', authMiddleware, async c => {
+		let userId = c.get('userId')
+
+		// Create transport in stateless mode (no session ID generator)
+		let transport = new WebStandardStreamableHTTPServerTransport({
+			sessionIdGenerator: undefined,
+			enableJsonResponse: false,
+		})
+
+		// Create and connect MCP server
+		let server = createMcpServer(userId)
+		await server.connect(transport)
+
+		// Handle the request
+		try {
+			let response = await transport.handleRequest(c.req.raw)
+			return response
+		} catch (error) {
+			console.error('MCP request error:', error)
+			if (error instanceof SyntaxError) {
+				return c.json({ error: 'Invalid JSON' }, 400)
+			}
+			throw error
+		}
+	})
+
+	return app
+}
