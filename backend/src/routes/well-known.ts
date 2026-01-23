@@ -19,5 +19,16 @@ export let createWellKnownRoutes = (): Hono => {
 		})
 	})
 
+	app.get('/oauth-protected-resource', c => {
+		// Build base URL from request
+		let url = new URL(c.req.url)
+		let baseUrl = `${url.protocol}//${url.host}`
+
+		return c.json({
+			resource: baseUrl,
+			authorization_servers: [baseUrl],
+		})
+	})
+
 	return app
 }

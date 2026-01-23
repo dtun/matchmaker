@@ -123,3 +123,51 @@ describe('GET /.well-known/oauth-authorization-server', () => {
 		expect(body.code_challenge_methods_supported).toContain('S256')
 	})
 })
+
+type ProtectedResourceMetadata = {
+	resource: string
+	authorization_servers: string[]
+}
+
+describe('GET /.well-known/oauth-protected-resource', () => {
+	test('should return 200 with valid JSON', async () => {
+		let app = new Hono()
+		app.route('/.well-known', createWellKnownRoutes())
+
+		let req = new Request('http://localhost/.well-known/oauth-protected-resource')
+
+		let res = await app.fetch(req)
+
+		expect(res.status).toBe(200)
+		expect(res.headers.get('Content-Type')).toContain('application/json')
+	})
+
+	test('should include authorization_servers array pointing to the issuer', async () => {
+		let app = new Hono()
+		app.route('/.well-known', createWellKnownRoutes())
+
+		let req = new Request('http://localhost/.well-known/oauth-protected-resource')
+
+		let res = await app.fetch(req)
+		let body = (await res.json()) as ProtectedResourceMetadata
+
+		expect(body.authorization_servers).toBeDefined()
+		expect(Array.isArray(body.authorization_servers)).toBe(true)
+		expect(body.authorization_servers.length).toBeGreaterThan(0)
+		expect(body.authorization_servers[0]).toBe('http://localhost')
+	})
+
+	test('should include resource identifier', async () => {
+		let app = new Hono()
+		app.route('/.well-known', createWellKnownRoutes())
+
+		let req = new Request('http://localhost/.well-known/oauth-protected-resource')
+
+		let res = await app.fetch(req)
+		let body = (await res.json()) as ProtectedResourceMetadata
+
+		expect(body.resource).toBeDefined()
+		expect(typeof body.resource).toBe('string')
+		expect(body.resource).toBe('http://localhost')
+	})
+})
