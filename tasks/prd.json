@@ -1,75 +1,87 @@
 {
-	"name": "MCP OAuth Discovery Endpoints",
-	"branchName": "feature/mcp-oauth-discovery-endpoints",
-	"userStories": [
-		{
-			"id": "US-001",
-			"title": "OAuth Server Discovery",
-			"description": "As an MCP client, I want to discover the OAuth server metadata at a well-known endpoint so that I can programmatically find the authorization and token endpoints without hardcoding them.",
-			"acceptanceCriteria": [
-				"GET /.well-known/oauth-authorization-server returns 200 with valid JSON",
-				"Response includes authorization_endpoint, token_endpoint, and registration_endpoint",
-				"Response content-type is application/json"
-			],
-			"priority": 1,
-			"passes": false,
-			"dependsOn": []
-		},
-		{
-			"id": "US-002",
-			"title": "Protected Resource Discovery",
-			"description": "As an MCP client, I want to discover which authorization server protects the MCP resource so that I know where to authenticate before accessing the API.",
-			"acceptanceCriteria": [
-				"GET /.well-known/oauth-protected-resource returns 200 with valid JSON",
-				"Response includes authorization_servers array pointing to the issuer",
-				"Response content-type is application/json"
-			],
-			"priority": 2,
-			"passes": false,
-			"dependsOn": []
-		},
-		{
-			"id": "US-003",
-			"title": "Dynamic Client Registration",
-			"description": "As an MCP client, I want to register myself as an OAuth client at runtime so that I can obtain a client_id without manual configuration.",
-			"acceptanceCriteria": [
-				"POST /register accepts JSON with client_name and redirect_uris",
-				"Response includes generated client_id",
-				"Registered client can be used in subsequent OAuth flows",
-				"Invalid requests return appropriate error responses"
-			],
-			"priority": 3,
-			"passes": false,
-			"dependsOn": []
-		},
-		{
-			"id": "US-004",
-			"title": "End-to-End OAuth Flow",
-			"description": "As an MCP client, I want to complete the full OAuth authentication flow so that I can access protected MCP resources over HTTP.",
-			"acceptanceCriteria": [
-				"Client can discover endpoints via well-known URLs",
-				"Client can register dynamically",
-				"Client can complete authorization code flow",
-				"Client receives valid access token"
-			],
-			"priority": 4,
-			"passes": false,
-			"dependsOn": ["US-001", "US-002", "US-003"]
-		},
-		{
-			"id": "US-005",
-			"title": "MCP Setup Instructions Page",
-			"description": "As a user setting up an MCP client, I want to visit a page with clear setup instructions and easy URL copying so that I can quickly configure my MCP client without hunting for documentation.",
-			"acceptanceCriteria": [
-				"Hidden route at /setup accessible via direct URL",
-				"Not linked from main navigation",
-				"Clean, minimal UI with brief explanation of MCP, server URL with Copy button, and step-by-step instructions",
-				"Copy button provides visual feedback",
-				"Mobile-friendly layout"
-			],
-			"priority": 5,
-			"passes": false,
-			"dependsOn": []
-		}
-	]
+  "name": "MCP OAuth Discovery Endpoints",
+  "branchName": "feature/mcp-oauth-discovery-endpoints",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "OAuth Server Discovery",
+      "description": "As an MCP client, I want to discover the OAuth server metadata at a well-known endpoint so that I can programmatically find the authorization and token endpoints without hardcoding them.",
+      "acceptanceCriteria": [
+        "GET /.well-known/oauth-authorization-server returns 200 with valid JSON",
+        "Response includes authorization_endpoint, token_endpoint, and registration_endpoint",
+        "Response content-type is application/json"
+      ],
+      "priority": 1,
+      "passes": true,
+      "dependsOn": [],
+      "completionNotes": "Completed by agent"
+    },
+    {
+      "id": "US-002",
+      "title": "Protected Resource Discovery",
+      "description": "As an MCP client, I want to discover which authorization server protects the MCP resource so that I know where to authenticate before accessing the API.",
+      "acceptanceCriteria": [
+        "GET /.well-known/oauth-protected-resource returns 200 with valid JSON",
+        "Response includes authorization_servers array pointing to the issuer",
+        "Response content-type is application/json"
+      ],
+      "priority": 2,
+      "passes": true,
+      "dependsOn": [],
+      "completionNotes": "Completed by agent"
+    },
+    {
+      "id": "US-003",
+      "title": "Dynamic Client Registration",
+      "description": "As an MCP client, I want to register myself as an OAuth client at runtime so that I can obtain a client_id without manual configuration.",
+      "acceptanceCriteria": [
+        "POST /register accepts JSON with client_name and redirect_uris",
+        "Response includes generated client_id",
+        "Registered client can be used in subsequent OAuth flows",
+        "Invalid requests return appropriate error responses"
+      ],
+      "priority": 3,
+      "passes": true,
+      "dependsOn": [],
+      "completionNotes": "Completed by agent"
+    },
+    {
+      "id": "US-004",
+      "title": "End-to-End OAuth Flow",
+      "description": "As an MCP client, I want to complete the full OAuth authentication flow so that I can access protected MCP resources over HTTP.",
+      "acceptanceCriteria": [
+        "Client can discover endpoints via well-known URLs",
+        "Client can register dynamically",
+        "Client can complete authorization code flow",
+        "Client receives valid access token"
+      ],
+      "priority": 4,
+      "passes": true,
+      "dependsOn": [
+        "US-001",
+        "US-002",
+        "US-003"
+      ],
+      "completionNotes": "Completed by agent"
+    },
+    {
+      "id": "US-005",
+      "title": "MCP Setup Instructions Page",
+      "description": "As a user setting up an MCP client, I want to visit a page with clear setup instructions and easy URL copying so that I can quickly configure my MCP client without hunting for documentation.",
+      "acceptanceCriteria": [
+        "Hidden route at /setup accessible via direct URL",
+        "Not linked from main navigation",
+        "Clean, minimal UI with brief explanation of MCP, server URL with Copy button, and step-by-step instructions",
+        "Copy button provides visual feedback",
+        "Mobile-friendly layout"
+      ],
+      "priority": 5,
+      "passes": true,
+      "dependsOn": [],
+      "completionNotes": "Completed by agent"
+    }
+  ],
+  "metadata": {
+    "updatedAt": "2026-01-23T03:49:37.675Z"
+  }
 }
