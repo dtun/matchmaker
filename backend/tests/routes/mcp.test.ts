@@ -228,4 +228,132 @@ describe('MCP Routes', () => {
 			expect([200, 204, 400]).toContain(res.status)
 		})
 	})
+
+	describe('Scope validation', () => {
+		test('returns 403 when user lacks mcp:access scope', async () => {
+			// Mock user without mcp:access scope
+			mockSupabaseClient = createMockSupabaseClient({
+				auth: {
+					getUser: mock(async () => ({
+						data: {
+							user: {
+								id: 'user-123',
+								app_metadata: { scopes: [] },
+							},
+						},
+						error: null,
+					})),
+				},
+			})
+
+			app = new Hono()
+			app.route('/mcp', createMcpRoutes(mockSupabaseClient))
+
+			let req = new Request('http://localhost/mcp', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json, text/event-stream',
+					Authorization: 'Bearer valid-token',
+				},
+				body: JSON.stringify({
+					jsonrpc: '2.0',
+					method: 'initialize',
+					params: {
+						protocolVersion: '2024-11-05',
+						capabilities: {},
+						clientInfo: { name: 'test-client', version: '1.0.0' },
+					},
+					id: 1,
+				}),
+			})
+
+			let res = await app.fetch(req)
+			expect(res.status).toBe(403)
+		})
+
+		test('returns 200 when user has mcp:access scope', async () => {
+			// Mock user with mcp:access scope
+			mockSupabaseClient = createMockSupabaseClient({
+				auth: {
+					getUser: mock(async () => ({
+						data: {
+							user: {
+								id: 'user-123',
+								app_metadata: { scopes: ['mcp:access'] },
+							},
+						},
+						error: null,
+					})),
+				},
+			})
+
+			app = new Hono()
+			app.route('/mcp', createMcpRoutes(mockSupabaseClient))
+
+			let req = new Request('http://localhost/mcp', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json, text/event-stream',
+					Authorization: 'Bearer valid-token',
+				},
+				body: JSON.stringify({
+					jsonrpc: '2.0',
+					method: 'initialize',
+					params: {
+						protocolVersion: '2024-11-05',
+						capabilities: {},
+						clientInfo: { name: 'test-client', version: '1.0.0' },
+					},
+					id: 1,
+				}),
+			})
+
+			let res = await app.fetch(req)
+			expect(res.status).toBe(200)
+		})
+
+		test('grants mcp:access scope by default when app_metadata.scopes is not set', async () => {
+			// Mock user without explicit scopes (default case - should be allowed)
+			mockSupabaseClient = createMockSupabaseClient({
+				auth: {
+					getUser: mock(async () => ({
+						data: {
+							user: {
+								id: 'user-123',
+								// No app_metadata.scopes - should default to allowing access
+							},
+						},
+						error: null,
+					})),
+				},
+			})
+
+			app = new Hono()
+			app.route('/mcp', createMcpRoutes(mockSupabaseClient))
+
+			let req = new Request('http://localhost/mcp', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json, text/event-stream',
+					Authorization: 'Bearer valid-token',
+				},
+				body: JSON.stringify({
+					jsonrpc: '2.0',
+					method: 'initialize',
+					params: {
+						protocolVersion: '2024-11-05',
+						capabilities: {},
+						clientInfo: { name: 'test-client', version: '1.0.0' },
+					},
+					id: 1,
+				}),
+			})
+
+			let res = await app.fetch(req)
+			expect(res.status).toBe(200)
+		})
+	})
 })

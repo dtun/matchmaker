@@ -28,6 +28,22 @@ export let createMcpRoutes = (supabaseClient: SupabaseClient) => {
 		})
 	)
 
+	// Required scope for MCP access
+	let REQUIRED_SCOPE = 'mcp:access'
+
+	// Check if user has the required scope
+	// Uses type assertion since app_metadata.scopes is a custom field
+	let hasRequiredScope = (user: { app_metadata?: Record<string, unknown> }): boolean => {
+		// If scopes are not explicitly set, allow access by default
+		// This enables all authenticated users to access MCP unless explicitly restricted
+		let scopes = user.app_metadata?.scopes as string[] | undefined
+		if (scopes === undefined) {
+			return true
+		}
+		// If scopes are explicitly set, check for required scope
+		return scopes.includes(REQUIRED_SCOPE)
+	}
+
 	// Authentication middleware
 	let authMiddleware = async (c: Context<Env>, next: Next) => {
 		let authHeader = c.req.header('Authorization')
@@ -46,6 +62,11 @@ export let createMcpRoutes = (supabaseClient: SupabaseClient) => {
 
 		if (error || !data.user) {
 			throw new HTTPException(401, { message: 'Unauthorized' })
+		}
+
+		// Check for required scope
+		if (!hasRequiredScope(data.user)) {
+			throw new HTTPException(403, { message: 'Forbidden: insufficient scope' })
 		}
 
 		c.set('userId', data.user.id)
