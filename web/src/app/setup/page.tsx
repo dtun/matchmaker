@@ -190,7 +190,7 @@ export default function SetupPage() {
 								</h2>
 								<div className="flex items-center gap-2">
 									<code className="flex-1 rounded-md border border-gray-200 bg-gray-100 px-4 py-3 font-mono text-sm text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100">
-										{`${mcpEndpoint.slice(0, 4)}...`}
+										{mcpEndpoint}
 									</code>
 									<button
 										onClick={handleCopy}
