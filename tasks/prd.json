@@ -31,10 +31,11 @@
         "Redirect with authorization code on success"
       ],
       "priority": 2,
-      "passes": false,
+      "passes": true,
       "dependsOn": [
         "US-001"
-      ]
+      ],
+      "completionNotes": "Completed by agent"
     },
     {
       "id": "US-003",
@@ -49,11 +50,12 @@
         "Support refresh token flow"
       ],
       "priority": 3,
-      "passes": false,
+      "passes": true,
       "dependsOn": [
         "US-001",
         "US-002"
-      ]
+      ],
+      "completionNotes": "Completed by agent"
     },
     {
       "id": "US-004",
@@ -65,11 +67,12 @@
         "Validate code verifier during token exchange"
       ],
       "priority": 4,
-      "passes": false,
+      "passes": true,
       "dependsOn": [
         "US-001",
         "US-003"
-      ]
+      ],
+      "completionNotes": "Completed by agent"
     },
     {
       "id": "US-005",
@@ -84,13 +87,14 @@
         "Can immediately use MCP tools"
       ],
       "priority": 5,
-      "passes": false,
+      "passes": true,
       "dependsOn": [
         "US-001",
         "US-002",
         "US-003",
         "US-004"
-      ]
+      ],
+      "completionNotes": "Completed by agent"
     },
     {
       "id": "US-006",
@@ -104,10 +108,11 @@
         "Previous session/data is accessible"
       ],
       "priority": 6,
-      "passes": false,
+      "passes": true,
       "dependsOn": [
         "US-005"
-      ]
+      ],
+      "completionNotes": "Completed by agent"
     },
     {
       "id": "US-007",
@@ -119,10 +124,11 @@
         "Claude Mac App maintains the connection across app restarts"
       ],
       "priority": 7,
-      "passes": false,
+      "passes": true,
       "dependsOn": [
         "US-003"
-      ]
+      ],
+      "completionNotes": "Completed by agent"
     },
     {
       "id": "US-008",
@@ -134,10 +140,11 @@
         "If OAuth flow fails, can retry without confusion"
       ],
       "priority": 8,
-      "passes": false,
+      "passes": true,
       "dependsOn": [
         "US-002"
-      ]
+      ],
+      "completionNotes": "Completed by agent"
     },
     {
       "id": "US-009",
@@ -149,16 +156,17 @@
         "Existing static token authentication continues to work unchanged"
       ],
       "priority": 9,
-      "passes": false,
+      "passes": true,
       "dependsOn": [
         "US-005",
         "US-006",
         "US-007",
         "US-008"
-      ]
+      ],
+      "completionNotes": "Completed by agent"
     }
   ],
   "metadata": {
-    "updatedAt": "2026-01-22T13:39:18.775Z"
+    "updatedAt": "2026-01-23T01:49:33.718Z"
   }
 }
