@@ -65,6 +65,14 @@ export let createMcpRoutes = (supabaseClient: SupabaseClient) => {
 		return scopes.includes(REQUIRED_SCOPE)
 	}
 
+	// Helper to get base URL respecting proxy headers (e.g., Railway, Cloudflare)
+	let getBaseUrl = (c: Context<Env>): string => {
+		let url = new URL(c.req.url)
+		let proto = c.req.header('X-Forwarded-Proto') || url.protocol.replace(':', '')
+		let host = c.req.header('X-Forwarded-Host') || url.host
+		return `${proto}://${host}`
+	}
+
 	// Authentication middleware
 	let authMiddleware = async (c: Context<Env>, next: Next) => {
 		let authHeader = c.req.header('Authorization')
@@ -78,8 +86,7 @@ export let createMcpRoutes = (supabaseClient: SupabaseClient) => {
 				status: 401,
 				message: 'Missing Authorization header',
 			})
-			let url = new URL(c.req.url)
-			let baseUrl = `${url.protocol}//${url.host}`
+			let baseUrl = getBaseUrl(c)
 			throw new HTTPException(401, {
 				message: 'Unauthorized',
 				res: new Response('Unauthorized', {
@@ -101,8 +108,7 @@ export let createMcpRoutes = (supabaseClient: SupabaseClient) => {
 				status: 401,
 				message: 'Invalid Authorization header format',
 			})
-			let url = new URL(c.req.url)
-			let baseUrl = `${url.protocol}//${url.host}`
+			let baseUrl = getBaseUrl(c)
 			throw new HTTPException(401, {
 				message: 'Unauthorized',
 				res: new Response('Unauthorized', {
@@ -124,8 +130,7 @@ export let createMcpRoutes = (supabaseClient: SupabaseClient) => {
 				status: 401,
 				message: error?.message || 'Invalid token',
 			})
-			let url = new URL(c.req.url)
-			let baseUrl = `${url.protocol}//${url.host}`
+			let baseUrl = getBaseUrl(c)
 			throw new HTTPException(401, {
 				message: 'Unauthorized',
 				res: new Response('Unauthorized', {

@@ -20,7 +20,7 @@ type OAuthServerMetadata = {
 
 type ProtectedResourceMetadata = {
 	resource: string
-	authorization_servers: string[]
+	authorization_servers: Array<{ issuer: string }>
 }
 
 type ClientRegistrationResponse = {
@@ -111,7 +111,7 @@ describe('End-to-End OAuth Flow', () => {
 		expect(resourceRes.status).toBe(200)
 		let resourceMetadata = (await resourceRes.json()) as ProtectedResourceMetadata
 
-		expect(resourceMetadata.authorization_servers).toContain('http://localhost')
+		expect(resourceMetadata.authorization_servers[0].issuer).toBe('http://localhost')
 
 		// Step 3: Register client dynamically
 		let registerReq = new Request('http://localhost/register', {

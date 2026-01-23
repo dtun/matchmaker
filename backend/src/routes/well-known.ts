@@ -1,12 +1,19 @@
 import { Hono } from 'hono'
+import type { Context } from 'hono'
+
+// Helper to get base URL respecting proxy headers (e.g., Railway, Cloudflare)
+let getBaseUrl = (c: Context): string => {
+	let url = new URL(c.req.url)
+	let proto = c.req.header('X-Forwarded-Proto') || url.protocol.replace(':', '')
+	let host = c.req.header('X-Forwarded-Host') || url.host
+	return `${proto}://${host}`
+}
 
 export let createWellKnownRoutes = (): Hono => {
 	let app = new Hono()
 
 	app.get('/oauth-authorization-server', c => {
-		// Build base URL from request
-		let url = new URL(c.req.url)
-		let baseUrl = `${url.protocol}//${url.host}`
+		let baseUrl = getBaseUrl(c)
 
 		return c.json({
 			issuer: baseUrl,
@@ -20,9 +27,7 @@ export let createWellKnownRoutes = (): Hono => {
 	})
 
 	app.get('/oauth-protected-resource', c => {
-		// Build base URL from request
-		let url = new URL(c.req.url)
-		let baseUrl = `${url.protocol}//${url.host}`
+		let baseUrl = getBaseUrl(c)
 
 		// RFC 9728 requires authorization_servers to be array of objects with issuer field
 		return c.json({
